@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constr"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/notify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="Neinei has a crush on you"
+        android:textColor="@color/colorBlack"
+        android:textSize="15sp"/>
+    <TextView
+        android:id="@+id/sendText"
+        android:layout_width="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorBlack"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/notify"
+        android:drawableEnd="@drawable/ic_message"
+        android:text="send a message"/>
+    <View
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendText"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorTab"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
