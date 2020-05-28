@@ -50,6 +50,7 @@
                         android:src="@drawable/ic_secret"/>
                 </RelativeLayout>
                 <TextView
+                    android:id="@+id/unreadInbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2"
@@ -79,6 +80,7 @@
                         android:src="@drawable/ic_inbox"/>
                 </RelativeLayout>
                 <TextView
+                    android:id="@+id/unreadSecret"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2"
@@ -109,6 +111,7 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/unreadNoti"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2"

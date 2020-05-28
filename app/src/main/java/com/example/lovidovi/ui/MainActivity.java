@@ -3,6 +3,10 @@ package com.example.lovidovi.ui;
 import android.os.Bundle;
 
 import com.example.lovidovi.R;
+import com.example.lovidovi.models.QuotesModel;
+import com.example.lovidovi.models.UnreadNotificationsModel;
+import com.example.lovidovi.networking.RetrofitClient;
+import com.example.lovidovi.utils.SharedPreferencesConfig;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -17,12 +21,23 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     ImageView home,inboxImage,secretImage,notImg;
     RelativeLayout inbox,secret,notification;
     FrameLayout frameLayout;
     NotificationsFragment notificationsFragment;
+    TextView unreadInbox,unreadSecret,unreadNot;
+    SharedPreferencesConfig sharedPreferencesConfig;
+    UnreadNotificationsModel unreadNotificationsModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +51,16 @@ public class MainActivity extends AppCompatActivity {
         notification = findViewById(R.id.notifications);
         inboxImage = findViewById(R.id.inboxImage);
         secretImage = findViewById(R.id.secretImage);
+        unreadInbox = findViewById(R.id.unreadInbox);
+        unreadSecret = findViewById(R.id.unreadSecret);
+        unreadNot = findViewById(R.id.unreadNoti);
         notImg = findViewById(R.id.notiImage);
         frameLayout = findViewById(R.id.fragments);
+        unreadNotificationsModel = new UnreadNotificationsModel();
+        sharedPreferencesConfig = new SharedPreferencesConfig(MainActivity.this);
         notificationsFragment = new NotificationsFragment();
 
+        unreadNo();
         homeload();
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +97,32 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
+    private void unreadNo() {
+        final String phone = sharedPreferencesConfig.readClientsPhone();
+        Call<List<UnreadNotificationsModel>> call = RetrofitClient.getInstance(MainActivity.this)
+                .getApiConnector()
+                .unreadN(phone);
+        call.enqueue(new Callback<List<UnreadNotificationsModel>>() {
+            @Override
+            public void onResponse(Call<List<UnreadNotificationsModel>> call, Response<List<UnreadNotificationsModel>> response) {
+                if (response.code()==201) {
+                    unreadNot.setText(unreadNotificationsModel.getNum()+"");
+                    Toast.makeText(MainActivity.this,phone + unreadNotificationsModel.getNum()+"",Toast.LENGTH_LONG).show();
+
+                }
+                else {
+                    Toast.makeText(MainActivity.this,"Server error",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UnreadNotificationsModel>> call, Throwable t) {
+                Toast.makeText(MainActivity.this,"Network error",Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+
     private void notificationLoad() {
         notImg.setColorFilter(getResources().getColor(R.color.colorTab));
         inboxImage.setColorFilter(getResources().getColor(R.color.colorWhite));
@@ -96,6 +143,9 @@ public class MainActivity extends AppCompatActivity {
         notImg.setColorFilter(getResources().getColor(R.color.colorWhite));
         secretImage.setColorFilter(getResources().getColor(R.color.colorWhite));
         home.setColorFilter(getResources().getColor(R.color.colorWhite));
+        MessagesFragment fragment = new MessagesFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragments,fragment,fragment.getTag()).commit();
     }
 
     private void secretLoad() {
@@ -103,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
         notImg.setColorFilter(getResources().getColor(R.color.colorWhite));
         inboxImage.setColorFilter(getResources().getColor(R.color.colorWhite));
         home.setColorFilter(getResources().getColor(R.color.colorWhite));
+        SecretMessagesFragment fragment = new SecretMessagesFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragments,fragment,fragment.getTag()).commit();
     }
 
     private void homeload() {

@@ -1,9 +1,12 @@
 package com.example.lovidovi.networking;
 
+import com.example.lovidovi.models.ChatsModel;
+import com.example.lovidovi.models.MessagesModel;
 import com.example.lovidovi.models.QuotesModel;
 import com.example.lovidovi.models.ReceiveNotificationsModel;
 import com.example.lovidovi.models.SendCodeModel;
 import com.example.lovidovi.models.SignUpMessagesModel;
+import com.example.lovidovi.models.UnreadNotificationsModel;
 import com.example.lovidovi.models.UsersModel;
 
 import java.util.List;
@@ -12,6 +15,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface JsonPlaceHolderInterface {
@@ -43,11 +47,27 @@ public interface JsonPlaceHolderInterface {
             @Field("phone")String phone,
             @Field("appSignature")String appSignature
     );
+    //messages
+    @FormUrlEncoded
+    @POST("api/fetchmsgs")
+    Call<List<MessagesModel>> getM(
+            @Field("phone")String phone
+    );
+    @GET("api/fetchchats")
+    Call<List<ChatsModel>> getChats(@Header("Authorization")String access_token);
+//    @GET("api/fetchchats")
+//    Call<List<ChatsModel>> getChats();
 
     //getnotifications
     @FormUrlEncoded
     @POST("api/fetch")
     Call<List<ReceiveNotificationsModel>> getNotifications(
+            @Field("phone")String phone
+    );
+    //unread notification
+    @FormUrlEncoded
+    @POST("api/unread")
+    Call<List<UnreadNotificationsModel>> unreadN(
             @Field("phone")String phone
     );
     //notifycrush

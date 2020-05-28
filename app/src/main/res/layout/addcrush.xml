@@ -27,6 +27,7 @@
         android:layout_marginTop="30dp"
         android:hint="crush's phone"
         android:inputType="phone"
+        android:background="@drawable/edittext"
         android:padding="5dp"
         android:textColor="@color/colorBlack"
         android:textSize="15sp"
