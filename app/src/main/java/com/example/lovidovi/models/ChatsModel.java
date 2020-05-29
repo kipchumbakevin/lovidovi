@@ -22,6 +22,9 @@ public class ChatsModel {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+    @SerializedName("participant")
+    @Expose
+    private Participant participant;
 
     public Integer getId() {
         return id;
@@ -69,5 +72,13 @@ public class ChatsModel {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 }

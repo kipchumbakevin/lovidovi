@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/received_text"
+        android:layout_width="wrap_content"
+        android:maxWidth="300dp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:minWidth="100dp"
+        android:textSize="15sp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/textviewreceived"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="received"/>
+    <TextView
+        android:id="@+id/sent_text"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:minWidth="100dp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/textviewsent"
+        android:maxWidth="300dp"
+        android:textSize="15sp"
+        android:layout_marginEnd="5dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/received_text"
+        android:text="sent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

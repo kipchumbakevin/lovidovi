@@ -5,24 +5,28 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MessagesModel {
+
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("sender_id")
+    @Expose
+    private Integer senderId;
+    @SerializedName("receiver_id")
+    @Expose
+    private String receiverId;
+    @SerializedName("group_id")
+    @Expose
+    private Integer groupId;
+    @SerializedName("chat_id")
+    @Expose
+    private Integer chatId;
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("sender_phone")
+    @SerializedName("has_media")
     @Expose
-    private String senderPhone;
-    @SerializedName("receiver_phone")
-    @Expose
-    private String receiverPhone;
-    @SerializedName("receiver_name")
-    @Expose
-    private String receiverName;
-    @SerializedName("status")
-    @Expose
-    private Integer status;
+    private Integer hasMedia;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -38,6 +42,38 @@ public class MessagesModel {
         this.id = id;
     }
 
+    public Integer getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Integer senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public Integer getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Integer chatId) {
+        this.chatId = chatId;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -46,36 +82,12 @@ public class MessagesModel {
         this.message = message;
     }
 
-    public String getSenderPhone() {
-        return senderPhone;
+    public Integer getHasMedia() {
+        return hasMedia;
     }
 
-    public void setSenderPhone(String senderPhone) {
-        this.senderPhone = senderPhone;
-    }
-
-    public String getReceiverPhone() {
-        return receiverPhone;
-    }
-
-    public void setReceiverPhone(String receiverPhone) {
-        this.receiverPhone = receiverPhone;
-    }
-
-    public String getReceiverName() {
-        return receiverName;
-    }
-
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setHasMedia(Integer hasMedia) {
+        this.hasMedia = hasMedia;
     }
 
     public String getCreatedAt() {
@@ -93,4 +105,5 @@ public class MessagesModel {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }

@@ -127,9 +127,10 @@ public class CodeVerificationActivity extends AppCompatActivity implements
                 hideProgress();
                 if(response.code()==201){
                     token = response.body().getAccessToken();
-                    clientsName = response.body().getUser().getName();
+                    clientsName = Integer.toString(response.body().getUser().getId());
                     clientsUsername = response.body().getUser().getUsername();
                     clientsPhone = response.body().getUser().getPhone();
+                  //  clientsId = Integer.toString(response.body().getUser().getId());
                     sharedPreferencesConfig.saveAuthenticationInformation(token,clientsName,clientsUsername,clientsPhone, Constants.ACTIVE_CONSTANT);
                     Toast.makeText(CodeVerificationActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CodeVerificationActivity.this, MainActivity.class);

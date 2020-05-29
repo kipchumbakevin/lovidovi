@@ -47,16 +47,25 @@ public interface JsonPlaceHolderInterface {
             @Field("phone")String phone,
             @Field("appSignature")String appSignature
     );
-    //messages
+    //send message
+    @FormUrlEncoded
+    @POST("api/sendmsg")
+    Call<SignUpMessagesModel> sendM(
+            @Field("phone")String phone,
+            @Field("msg")String mess
+    );
+    //fetchmessages
     @FormUrlEncoded
     @POST("api/fetchmsgs")
     Call<List<MessagesModel>> getM(
-            @Field("phone")String phone
+            @Field("chat_id")String chat_id
     );
-    @GET("api/fetchchats")
-    Call<List<ChatsModel>> getChats(@Header("Authorization")String access_token);
 //    @GET("api/fetchchats")
-//    Call<List<ChatsModel>> getChats();
+//    Call<List<ChatsModel>> getChats(@Header("Authorization")String access_token);
+
+    //fetch chats
+    @GET("api/fetchchats")
+    Call<List<ChatsModel>> getChats();
 
     //getnotifications
     @FormUrlEncoded

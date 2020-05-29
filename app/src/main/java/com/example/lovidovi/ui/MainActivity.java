@@ -1,5 +1,6 @@
 package com.example.lovidovi.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.lovidovi.R;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     TextView unreadInbox,unreadSecret,unreadNot;
     SharedPreferencesConfig sharedPreferencesConfig;
     UnreadNotificationsModel unreadNotificationsModel;
+    String gg = "nn";
+    String hh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +62,8 @@ public class MainActivity extends AppCompatActivity {
         unreadNotificationsModel = new UnreadNotificationsModel();
         sharedPreferencesConfig = new SharedPreferencesConfig(MainActivity.this);
         notificationsFragment = new NotificationsFragment();
-
-        unreadNo();
         homeload();
+        unreadNo();
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

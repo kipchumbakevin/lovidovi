@@ -24,7 +24,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     EditText userName,pass;
     Button login;
-    private String clientsName,clientsUsername,clientsPhone,accessToken;
+    private String clientsName,clientsUsername,clientsPhone,accessToken,clientsId;
     private SharedPreferencesConfig sharedPreferencesConfig;
 
     @Override
@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("logged", ""+ sharedPreferencesConfig.isloggedIn());
 
         if (sharedPreferencesConfig.isloggedIn()){
+           // Toast.makeText(LoginActivity.this,sharedPreferencesConfig.readClientsId(),Toast.LENGTH_LONG).show();
             welcome();
         }
     }
@@ -93,11 +94,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<UsersModel> call, Response<UsersModel> response) {
                // hideProgress();
                 if(response.isSuccessful()){
+                  //  String mmm =  Integer.toString(response.body().getUser().getId());
                     accessToken = response.body().getAccessToken();
-                    clientsName = response.body().getUser().getName();
+                    clientsName = Integer.toString(response.body().getUser().getId());
                     clientsUsername = response.body().getUser().getUsername();
                     clientsPhone = response.body().getUser().getPhone();
+                 //   clientsId = Integer.toString(response.body().getUser().getId());
                     sharedPreferencesConfig.saveAuthenticationInformation(accessToken,clientsName,clientsUsername,clientsPhone, Constants.ACTIVE_CONSTANT);
+                    Toast.makeText(LoginActivity.this,clientsName,Toast.LENGTH_LONG).show();
                     welcome();
                 }
                 else{

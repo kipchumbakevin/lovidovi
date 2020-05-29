@@ -1,6 +1,7 @@
 package com.example.lovidovi.adapters;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lovidovi.R;
-import com.example.lovidovi.models.ChatsModel;
 import com.example.lovidovi.models.MessagesModel;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
 
@@ -18,26 +18,36 @@ import java.util.ArrayList;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder> {
     private final Context mContext;
-    private final ArrayList<ChatsModel> mMessagesArrayList;
+    private final ArrayList<MessagesModel> mMessagesArrayList;
     private final LayoutInflater mLayoutInflator;
 
-    public MessagesAdapter(Context context, ArrayList<ChatsModel>messagesArray){
+    public MessagesAdapter(Context context, ArrayList<MessagesModel>messagesArray){
         mContext = context;
         mMessagesArrayList = messagesArray;
         mLayoutInflator = LayoutInflater.from(mContext);
     }
     @NonNull
     @Override
-    public MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mLayoutInflator.inflate(R.layout.chatslayout,parent,false);
+    public MessagesAdapter.MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = mLayoutInflator.inflate(R.layout.messageslayout,parent,false);
         return new MessagesViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MessagesAdapter.MessagesViewHolder holder, int position) {
         SharedPreferencesConfig sharedPreferencesConfig = new SharedPreferencesConfig(mContext);
-        ChatsModel chatsModel = mMessagesArrayList.get(position);
-        holder.username.setText(chatsModel.getParticipantId());
+        MessagesModel messagesModel = mMessagesArrayList.get(position);
+        holder.iii = Integer.toString(messagesModel.getSenderId());
+        if (holder.iii.equals(sharedPreferencesConfig.readClientsName())){
+            holder.sent.setVisibility(View.VISIBLE);
+            holder.received.setVisibility(View.GONE);
+            holder.sent.setText(messagesModel.getMessage());
+        }else{
+            holder.received.setVisibility(View.VISIBLE);
+            holder.sent.setVisibility(View.GONE);
+            holder.received.setText(messagesModel.getMessage()+" "+holder.iii+" hh"+" "+sharedPreferencesConfig.readClientsName());
+        }
+
 
 
     }
@@ -48,12 +58,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     }
 
     public class MessagesViewHolder extends RecyclerView.ViewHolder {
-        String user;
-        TextView username,sample;
+        String iii;
+
+        TextView received,sent;
         public MessagesViewHolder(@NonNull View itemView) {
             super(itemView);
-            username = itemView.findViewById(R.id.sender_username);
-            sample = itemView.findViewById(R.id.sample);
+            received = itemView.findViewById(R.id.received_text);
+            sent = itemView.findViewById(R.id.sent_text);
         }
     }
 }

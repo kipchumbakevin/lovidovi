@@ -25,8 +25,9 @@ public class SharedPreferencesConfig {
         editor.putString(context.getResources().getString(R.string.CLIENTS_TOKEN),accessToken);
         editor.putString(context.getResources().getString(R.string.CLIENTS_PHONE),phone);
         editor.putString(context.getResources().getString(R.string.CLIENTS_STATUS),status);
-        editor.putString(context.getResources().getString(R.string.CLIENTS_NAME),username);
-        editor.putString(context.getResources().getString(R.string.CLIENTS_USERNAME),name);
+        editor.putString(context.getResources().getString(R.string.CLIENTS_NAME),name);
+        editor.putString(context.getResources().getString(R.string.CLIENTS_USERNAME),username);
+        //editor.putString(context.getResources().getString(R.string.CLIENTS_ID),person);
 
         editor.commit();
         Log.d("shared", accessToken);
@@ -59,6 +60,11 @@ public class SharedPreferencesConfig {
         accessToken = sharedPreferences.getString(context.getResources().getString(R.string.CLIENTS_TOKEN),"");
         return accessToken;
     }
+//    public String readClientsId(){
+//        String person;
+//        person = sharedPreferences.getString(context.getResources().getString(R.string.CLIENTS_ID),"");
+//        return person;
+//    }
     public  boolean isloggedIn(){
         return readClientsStatus().equals(Constants.ACTIVE_CONSTANT);
     }

@@ -12,6 +12,10 @@
     <color name="colorLogin">#131313</color>
     <color name="colorTab">#038D6B</color>
     <color name="colorNotViewd">#CFD8F3</color>
+    <color name="colorGreen">#029106</color>
+    <color name="colorSent">#A1C7D8</color>
+    <color name="colorReceived">#E2CF91</color>
+
 
 
 </resources>

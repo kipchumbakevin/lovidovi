@@ -4,34 +4,25 @@ package com.example.lovidovi.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.lovidovi.R;
-import com.example.lovidovi.adapters.MessagesAdapter;
+import com.example.lovidovi.adapters.ChatsAdapter;
 import com.example.lovidovi.models.ChatsModel;
-import com.example.lovidovi.models.MessagesModel;
-import com.example.lovidovi.networking.RetrofitClient;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SecretMessagesFragment extends Fragment {
     RecyclerView recyclerView;
-    MessagesAdapter messagesAdapter;
+    ChatsAdapter chatsAdapter;
     private ArrayList<ChatsModel>mMessagesArrayList = new ArrayList<>();
     SharedPreferencesConfig sharedPreferencesConfig;
 
@@ -47,8 +38,8 @@ public class SecretMessagesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_secret_messages, container, false);
 //        recyclerView = view.findViewById(R.id.secretrecycler);
-//        messagesAdapter = new MessagesAdapter(getActivity(),mMessagesArrayList);
-//        recyclerView.setAdapter(messagesAdapter);
+//        chatsAdapter = new ChatsAdapter(getActivity(),mMessagesArrayList);
+//        recyclerView.setAdapter(chatsAdapter);
 //        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getResources().getInteger(R.integer.product_grid_span)));
 //        sharedPreferencesConfig = new SharedPreferencesConfig(getActivity());
 //        viewmS();
@@ -67,7 +58,7 @@ public class SecretMessagesFragment extends Fragment {
 //                // hideProgress();
 //                if(response.code()==200){
 //                    mMessagesArrayList.addAll(response.body());
-//                    messagesAdapter.notifyDataSetChanged();
+//                    chatsAdapter.notifyDataSetChanged();
 //                }
 //                else{
 //                    Toast.makeText(getActivity(),"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
