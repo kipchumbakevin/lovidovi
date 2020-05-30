@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     EditText userName,pass;
-    Button login;
+    Button login,signup;
     private String clientsName,clientsUsername,clientsPhone,accessToken,clientsId;
     private SharedPreferencesConfig sharedPreferencesConfig;
 
@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-       // signup = findViewById(R.id.signUp);
+        signup = findViewById(R.id.gotosignup);
         login = findViewById(R.id.button_login);
         //forgotPass = findViewById(R.id.forgotPassword);
         userName = findViewById(R.id.logusername);
@@ -39,14 +39,14 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferencesConfig = new SharedPreferencesConfig(LoginActivity.this);
         pass = findViewById(R.id.logpass);
 
-//        signup.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

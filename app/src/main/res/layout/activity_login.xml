@@ -6,6 +6,13 @@
     android:background="@color/colorWhite"
     android:layout_height="match_parent"
     tools:context=".auth.LoginActivity">
+    <Button
+        android:id="@+id/gotosignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
     <TextView
         android:id="@+id/lov"
         android:layout_marginTop="10dp"

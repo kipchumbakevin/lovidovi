@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ChatsModel {
+
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -25,6 +26,9 @@ public class ChatsModel {
     @SerializedName("participant")
     @Expose
     private Participant participant;
+    @SerializedName("user")
+    @Expose
+    private Owner owner;
 
     public Integer getId() {
         return id;
@@ -80,5 +84,13 @@ public class ChatsModel {
 
     public void setParticipant(Participant participant) {
         this.participant = participant;
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
     }
 }

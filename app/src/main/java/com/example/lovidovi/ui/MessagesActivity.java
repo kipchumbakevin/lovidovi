@@ -3,16 +3,22 @@ package com.example.lovidovi.ui;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lovidovi.R;
 import com.example.lovidovi.adapters.MessagesAdapter;
 import com.example.lovidovi.models.MessagesModel;
+import com.example.lovidovi.models.SignUpMessagesModel;
 import com.example.lovidovi.networking.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -27,7 +33,9 @@ public class MessagesActivity extends AppCompatActivity {
     private ArrayList<MessagesModel>mMessagesArrayList = new ArrayList<>();
     MessagesAdapter messagesAdapter;
     RecyclerView recyclerView;
-    String chat_id,title;
+    String chat_id,title,phone;
+    ImageView send;
+    EditText typeamessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +44,73 @@ public class MessagesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.messagesRecyclerView);
         messagesAdapter = new MessagesAdapter(MessagesActivity.this,mMessagesArrayList);
         recyclerView.setAdapter(messagesAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(MessagesActivity.this,getResources().getInteger(R.integer.product_grid_span)));
+        typeamessage = findViewById(R.id.typeamessage);
+        send = findViewById(R.id.sendthemsg);
         chat_id = getIntent().getExtras().getString("CHATID");
         title = getIntent().getExtras().getString("USERNAME");
+        phone = getIntent().getExtras().getString("PHONE");
         ActionBar actionBar = getSupportActionBar();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         if (actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        Toast.makeText(MessagesActivity.this, phone, Toast.LENGTH_LONG).show();
         setTitle(title);
         viewMessages();
+        typeamessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                send.setEnabled(false);
+                send.setBackgroundColor(getResources().getColor(R.color.colorGray));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length()!=0){
+                    send.setEnabled(true);
+                    send.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendDeMessage();
+            }
+        });
     }
+
+    private void sendDeMessage() {
+        String mess = typeamessage.getText().toString();
+        Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MessagesActivity.this)
+                .getApiConnector()
+                .sendM(phone, mess);
+        call.enqueue(new Callback<SignUpMessagesModel>() {
+            @Override
+            public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(MessagesActivity.this, "Message sent", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MessagesActivity.this, "Server error", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                Toast.makeText(MessagesActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void viewMessages() {
         Call<List<MessagesModel>> call = RetrofitClient.getInstance(MessagesActivity.this)
                 .getApiConnector()

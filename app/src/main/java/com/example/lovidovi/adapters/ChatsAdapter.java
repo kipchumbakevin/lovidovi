@@ -37,11 +37,24 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
 
     @Override
     public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
+        SharedPreferencesConfig sharedPreferencesConfig = new SharedPreferencesConfig(mContext);
         ChatsModel chatsModel = mMessagesArrayList.get(position);
-        if (chatsModel.getParticipant()== null){
+        if (chatsModel.getParticipant()== null && !chatsModel.getParticipantId().equals(sharedPreferencesConfig.readClientsName())){
             holder.username.setText(chatsModel.getParticipantId());
-        }else {
+            holder.pp = chatsModel.getParticipantId();
+        }
+        if (chatsModel.getParticipantId().equals(sharedPreferencesConfig.readClientsName())&&chatsModel.getOwner()!=null)
+        {
+            holder.username.setText(chatsModel.getOwner().getUsername());
+            holder.pp = chatsModel.getOwner().getPhone();
+        }
+        if (chatsModel.getParticipantId().equals(sharedPreferencesConfig.readClientsName())&&chatsModel.getOwner()==null)
+        {
+            holder.username.setText(chatsModel.getOwnerId());
+        }
+        if(chatsModel.getParticipant()!=null && !chatsModel.getParticipantId().equals(sharedPreferencesConfig.readClientsName()) ) {
             holder.username.setText(chatsModel.getParticipant().getUsername());
+            holder.pp = chatsModel.getParticipant().getPhone();
         }
 
         holder.mcurrentposition = chatsModel.getId();
@@ -55,7 +68,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
 
     public class MessagesViewHolder extends RecyclerView.ViewHolder {
         int mcurrentposition;
-        String id;
+        String id,tt,pp;
         TextView username,sample;
         public MessagesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +81,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
                     Intent intent = new Intent(mContext, MessagesActivity.class);
                     intent.putExtra("CHATID",id);
                     intent.putExtra("USERNAME",username.getText().toString());
+                    intent.putExtra("PHONE",pp);
                     mContext.startActivity(intent);
                  //   ((Activity) mContext).finish();
                 }

@@ -5,37 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MessagesActivity">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messagesRecyclerView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/jj"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/jj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
+            android:id="@+id/typeamessage"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
             android:drawableStart="@drawable/ic_sentiment"
             android:drawablePadding="10dp"
-            android:inputType="textCapSentences"
             android:hint="Type a message"
+            android:inputType="textCapSentences"
+            android:maxWidth="200dp"
             android:padding="5dp"
-            android:textSize="15sp"
             android:textColor="@color/colorBlack"
-            android:background="@drawable/edittext"
-            android:maxWidth="200dp"/>
+            android:textSize="15sp" />
+
         <ImageView
-            android:layout_marginStart="5dp"
+            android:id="@+id/sendthemsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_send"/>
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_send" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

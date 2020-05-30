@@ -45,7 +45,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         }else{
             holder.received.setVisibility(View.VISIBLE);
             holder.sent.setVisibility(View.GONE);
-            holder.received.setText(messagesModel.getMessage()+" "+holder.iii+" hh"+" "+sharedPreferencesConfig.readClientsName());
+            holder.received.setText(messagesModel.getMessage());
         }
 
 
