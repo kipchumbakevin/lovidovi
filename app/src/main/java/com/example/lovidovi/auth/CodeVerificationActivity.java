@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lovidovi.models.ChangedForgotPassModel;
 import com.example.lovidovi.ui.MainActivity;
 import com.example.lovidovi.R;
 import com.example.lovidovi.models.SendCodeModel;
@@ -51,7 +52,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
     public String appSignature;
     private Context context;
     private SharedPreferencesConfig sharedPreferencesConfig;
-    private static final String RESET ="com.example.lovidovi.auth.reset" ;
+    private static final String RESET ="com.example.lovidovi.settings" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +73,12 @@ public class CodeVerificationActivity extends AppCompatActivity implements
         if(getIntent().hasExtra(RESET)) {
             reset = getIntent().getBooleanExtra(RESET, false);
         }
-//        resend.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                sendCode();
-//            }
-//        });
+        resend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendCode();
+            }
+        });
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,7 +223,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
             registerUserAfterConfirmation();
         }else{
             Toast.makeText(context, "good", Toast.LENGTH_SHORT).show();
-           // changePassword();
+            changePassword();
         }
     }
 
@@ -253,42 +254,40 @@ public class CodeVerificationActivity extends AppCompatActivity implements
         enter_code.setText(""); // Clear Code
         sendCode();
     }
-//    private void changePassword() {
-//        showProgress();
-//        String code = enter_code.getText().toString();
-//        Call<ChangedForgotPassModel> call = RetrofitClient.getInstance(this)
-//                .getApiConnector()
-//                .newPass(code,newpass,phone);
-//        call.enqueue(new Callback<ChangedForgotPassModel>() {
-//            @Override
-//            public void onResponse(Call<ChangedForgotPassModel> call, Response<ChangedForgotPassModel> response) {
-//                hideProgress();
-//                if(response.isSuccessful()){
-//                    Toast.makeText(CodeAfterSignUpActivity.this,response.body().getMessage(), Toast.LENGTH_SHORT).show();
-//                    token = response.body().getAccessToken();
-//                    clientsFirstName = response.body().getUser().getFirstName();
-//                    clientsLastName = response.body().getUser().getLastName();
-//                    clientsLocation = response.body().getUser().getLocation();
-//                    clientsUsername = response.body().getUser().getUsername();
-//                    clientsPhone = response.body().getUser().getPhone();
-//                    sharedPreferencesConfig.saveAuthenticationInformation(token,clientsFirstName,clientsLastName,clientsLocation,clientsUsername,clientsPhone, Constants.ACTIVE_CONSTANT);
-//                    Intent intent = new Intent(CodeAfterSignUpActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                }
-//                else{
-//                    Toast.makeText(CodeAfterSignUpActivity.this,"response:"+response.message(),Toast.LENGTH_SHORT).show();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ChangedForgotPassModel> call, Throwable t) {
-//                hideProgress();
-//                Toast.makeText(CodeAfterSignUpActivity.this,"errot:"+t.getMessage(),Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void changePassword() {
+        showProgress();
+        String code = enter_code.getText().toString();
+        Call<ChangedForgotPassModel> call = RetrofitClient.getInstance(this)
+                .getApiConnector()
+                .newPass(code,newpass,phone);
+        call.enqueue(new Callback<ChangedForgotPassModel>() {
+            @Override
+            public void onResponse(Call<ChangedForgotPassModel> call, Response<ChangedForgotPassModel> response) {
+                hideProgress();
+                if(response.isSuccessful()){
+                    Toast.makeText(CodeVerificationActivity.this,response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    token = response.body().getAccessToken();
+                    clientsName = Integer.toString(response.body().getUser().getId());
+                    clientsUsername = response.body().getUser().getUsername();
+                    clientsPhone = response.body().getUser().getPhone();
+                    sharedPreferencesConfig.saveAuthenticationInformation(token,clientsName,clientsUsername,clientsPhone, Constants.ACTIVE_CONSTANT);
+                    Intent intent = new Intent(CodeVerificationActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else{
+                    Toast.makeText(CodeVerificationActivity.this,"response:"+response.message(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ChangedForgotPassModel> call, Throwable t) {
+                hideProgress();
+                Toast.makeText(CodeVerificationActivity.this,"errot:"+t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void showProgress(){
         progress.setVisibility(View.VISIBLE);
     }

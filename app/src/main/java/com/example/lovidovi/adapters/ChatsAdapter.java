@@ -19,6 +19,7 @@ import com.example.lovidovi.utils.SharedPreferencesConfig;
 import java.util.ArrayList;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesViewHolder> {
+    private static final String KNOW = "com.example.lovidovi.adapters";
     private final Context mContext;
     private final ArrayList<ChatsModel> mMessagesArrayList;
     private final LayoutInflater mLayoutInflator;
@@ -54,6 +55,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
         }
         if(chatsModel.getParticipant()!=null && !chatsModel.getParticipantId().equals(sharedPreferencesConfig.readClientsName()) ) {
             holder.username.setText(chatsModel.getParticipant().getUsername());
+            holder.sample.setText(chatsModel.getParticipant().getPhone());
             holder.pp = chatsModel.getParticipant().getPhone();
         }
 
@@ -81,6 +83,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
                     Intent intent = new Intent(mContext, MessagesActivity.class);
                     intent.putExtra("CHATID",id);
                     intent.putExtra("USERNAME",username.getText().toString());
+                    intent.putExtra(KNOW,true);
                     intent.putExtra("PHONE",pp);
                     mContext.startActivity(intent);
                  //   ((Activity) mContext).finish();

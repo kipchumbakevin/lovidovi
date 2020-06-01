@@ -1,18 +1,25 @@
 package com.example.lovidovi.ui;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +47,8 @@ public class NotificationsFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     private ArrayList<ReceiveNotificationsModel> mNotificationsArrayList = new ArrayList<>();
     SharedPreferencesConfig sharedPreferencesConfig;
+    private final int REQUEST_CODE=99;
+    EditText enterNum;
 
 
     public NotificationsFragment() {
@@ -55,7 +64,7 @@ public class NotificationsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.notificationsrecycler);
         notificationsAdapter = new NotificationsAdapter(getActivity(),mNotificationsArrayList);
         recyclerView.setAdapter(notificationsAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getResources().getInteger(R.integer.product_grid_span)));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         sharedPreferencesConfig = new SharedPreferencesConfig(getActivity());
         floatingActionButton = view.findViewById(R.id.fab);
         viewNotifications();
@@ -65,16 +74,39 @@ public class NotificationsFragment extends Fragment {
                 dial();
             }
         });
-
-
+        readall();
         return view;
+
+    }
+
+    private void readall() {
+        String phone = sharedPreferencesConfig.readClientsPhone();
+        Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
+                .getApiConnector()
+                .readAllN(phone);
+        call.enqueue(new Callback<SignUpMessagesModel>() {
+            @Override
+            public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                if (response.code() == 201) {
+                } else {
+                    Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void dial() {
         TextView cancel,done;
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         View view = getLayoutInflater().inflate(R.layout.addcrush, null);
-        final EditText enterNum = view.findViewById(R.id.crushphone);
+        enterNum = view.findViewById(R.id.crushphone);
+        ImageView contacts = view.findViewById(R.id.gotocontacts);
         cancel = view.findViewById(R.id.cancel);
         done = view.findViewById(R.id.done);
 
@@ -111,6 +143,13 @@ public class NotificationsFragment extends Fragment {
                 }
             }
         });
+        contacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +157,31 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode,Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        switch (reqCode) {
+            case (REQUEST_CODE):
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor c = getActivity().getContentResolver().query(contactData, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String contactId = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+                        String hasNumber = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        String num = "";
+                        if (Integer.valueOf(hasNumber) == 1) {
+                            Cursor numbers = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                            while (numbers.moveToNext()) {
+                                num = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                enterNum.setText(num);
+                            }
+                        }
+                    }
+                    break;
+                }
+        }
     }
 
     private void viewNotifications() {

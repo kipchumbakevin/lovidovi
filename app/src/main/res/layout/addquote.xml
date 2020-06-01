@@ -21,7 +21,7 @@
 
 
     <EditText
-        android:id="@+id/crushphone"
+        android:id="@+id/enterquote"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="30dp"
@@ -30,7 +30,8 @@
         android:hint="type your quote"
         android:gravity="top"
         android:background="@drawable/edittext"
-        android:inputType="textCapSentences"
+        android:inputType="text|textMultiLine|textCapSentences"
+        android:maxLines="7"
         android:padding="5dp"
         android:textColor="@color/colorBlack"
         android:textSize="15sp"
@@ -40,7 +41,7 @@
     <TextView
         android:id="@+id/cancel"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/crushphone"
+        app:layout_constraintTop_toBottomOf="@+id/enterquote"
         android:layout_width="wrap_content"
         android:textColor="@color/colorAccent"
         android:layout_marginStart="20dp"
@@ -57,7 +58,7 @@
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/crushphone"
+        app:layout_constraintTop_toBottomOf="@+id/enterquote"
         android:text="Done"/>
 
 

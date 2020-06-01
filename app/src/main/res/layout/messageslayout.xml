@@ -12,6 +12,7 @@
         android:layout_marginTop="10dp"
         android:padding="5dp"
         android:minWidth="100dp"
+        android:textIsSelectable="true"
         android:textSize="15sp"
         android:layout_marginStart="5dp"
         android:background="@drawable/textviewreceived"
@@ -22,6 +23,7 @@
     <TextView
         android:id="@+id/sent_text"
         android:padding="5dp"
+        android:textIsSelectable="true"
         android:layout_width="wrap_content"
         android:minWidth="100dp"
         android:textColor="@color/colorBlack"

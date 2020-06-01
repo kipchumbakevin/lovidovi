@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.lovidovi.R;
+import com.example.lovidovi.auth.LoginActivity;
 import com.example.lovidovi.models.QuotesModel;
+import com.example.lovidovi.models.SignUpMessagesModel;
 import com.example.lovidovi.models.UnreadNotificationsModel;
 import com.example.lovidovi.networking.RetrofitClient;
+import com.example.lovidovi.settings.SettingsActivity;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -16,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
     TextView unreadInbox,unreadSecret,unreadNot;
     SharedPreferencesConfig sharedPreferencesConfig;
     UnreadNotificationsModel unreadNotificationsModel;
+    private Boolean reset = false;
     String gg = "nn";
-    String hh;
+    private static final String MESS ="com.example.lovidovi.ui";
+    int dd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +68,20 @@ public class MainActivity extends AppCompatActivity {
         unreadNotificationsModel = new UnreadNotificationsModel();
         sharedPreferencesConfig = new SharedPreferencesConfig(MainActivity.this);
         notificationsFragment = new NotificationsFragment();
-        homeload();
+        if (getIntent().hasExtra(MESS)){
+            reset = getIntent().getBooleanExtra(MESS, false);
+        }
+        if (reset){
+           inboxLoad();
+        }else{
+            homeload();
+        }
         unreadNo();
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 homeload();
+                unreadNo();
             }
         });
         secret.setOnClickListener(new View.OnClickListener() {
@@ -79,9 +93,18 @@ public class MainActivity extends AppCompatActivity {
         inbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dd = 1;
                 inboxLoad();
             }
         });
+        if (dd==1){
+            inboxLoad();
+        }
+        if (dd==2){
+            homeload();
+        }else {
+            homeload();
+        }
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,15 +124,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void unreadNo() {
         final String phone = sharedPreferencesConfig.readClientsPhone();
-        Call<List<UnreadNotificationsModel>> call = RetrofitClient.getInstance(MainActivity.this)
+        Toast.makeText(MainActivity.this,phone,Toast.LENGTH_LONG).show();
+        Call<UnreadNotificationsModel> call = RetrofitClient.getInstance(MainActivity.this)
                 .getApiConnector()
                 .unreadN(phone);
-        call.enqueue(new Callback<List<UnreadNotificationsModel>>() {
+        call.enqueue(new Callback<UnreadNotificationsModel>() {
             @Override
-            public void onResponse(Call<List<UnreadNotificationsModel>> call, Response<List<UnreadNotificationsModel>> response) {
+            public void onResponse(Call<UnreadNotificationsModel> call, Response<UnreadNotificationsModel> response) {
                 if (response.code()==201) {
-                    unreadNot.setText(unreadNotificationsModel.getNum()+"");
-                    Toast.makeText(MainActivity.this,phone + unreadNotificationsModel.getNum()+"",Toast.LENGTH_LONG).show();
+                    if (response.body().getNum()>0){
+                        unreadNot.setVisibility(View.VISIBLE);
+                        unreadNot.setText(response.body().getNum()+"");
+                    }
+
 
                 }
                 else {
@@ -118,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<UnreadNotificationsModel>> call, Throwable t) {
-                Toast.makeText(MainActivity.this,"Network error",Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<UnreadNotificationsModel> call, Throwable t) {
+                Toast.makeText(MainActivity.this,"Network error"+t.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -186,9 +213,44 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.action_logout){
+            logout();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+       // showProgress();
+        Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MainActivity.this)
+                .getApiConnector()
+                .logOut();
+        call.enqueue(new Callback<SignUpMessagesModel>() {
+            @Override
+            public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+              //  hideProgress();
+                if (response.code() == 200) {
+                    sharedPreferencesConfig.clear();
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(MainActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("logout", sharedPreferencesConfig.readClientsAccessToken());
+
+                } else {
+                    Toast.makeText(MainActivity.this, "response:" + response.message(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+           //     hideProgress();
+                Toast.makeText(MainActivity.this, "errot:" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

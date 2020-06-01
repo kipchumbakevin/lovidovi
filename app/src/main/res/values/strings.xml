@@ -3,9 +3,6 @@
     <string name="action_settings">Settings</string>
 
 
-
-
-
     <string name="SHARED_PREFERENCES">com.example.lovidovi.utils.sharedpref</string>
     <string name="CLIENTS_TOKEN">com.example.lovidovi.utils.sharedpref.accessToken</string>
     <string name="CLIENTS_NAME">com.example.lovidovi.utils.sharedpref.name</string>

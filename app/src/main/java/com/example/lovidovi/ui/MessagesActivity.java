@@ -33,9 +33,12 @@ public class MessagesActivity extends AppCompatActivity {
     private ArrayList<MessagesModel>mMessagesArrayList = new ArrayList<>();
     MessagesAdapter messagesAdapter;
     RecyclerView recyclerView;
-    String chat_id,title,phone;
+    String chat_id,title,phone,simu;
+    private static final String KNOW = "com.example.lovidovi.adapters";
     ImageView send;
     EditText typeamessage;
+    private static final String MESS ="com.example.lovidovi.ui";
+    private Boolean reset = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,29 +52,41 @@ public class MessagesActivity extends AppCompatActivity {
         chat_id = getIntent().getExtras().getString("CHATID");
         title = getIntent().getExtras().getString("USERNAME");
         phone = getIntent().getExtras().getString("PHONE");
+        simu = getIntent().getExtras().getString("SIMU");
+        if(getIntent().hasExtra(KNOW)) {
+            reset = getIntent().getBooleanExtra(KNOW, false);
+        }
         ActionBar actionBar = getSupportActionBar();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setStackFromEnd(false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        typeamessage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                typeamessage.setTextIsSelectable(true);
+                return false;
+            }
+        });
         if (actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        Toast.makeText(MessagesActivity.this, phone, Toast.LENGTH_LONG).show();
         setTitle(title);
-        viewMessages();
+        if (reset){
+            viewMessages();
+        }else{
+            viewSecret();
+        }
         typeamessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 send.setEnabled(false);
-                send.setBackgroundColor(getResources().getColor(R.color.colorGray));
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length()!=0){
                     send.setEnabled(true);
-                    send.setBackgroundColor(getResources().getColor(R.color.colorGreen));
                 }
             }
 
@@ -83,7 +98,66 @@ public class MessagesActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendDeMessage();
+                if (reset){
+                    sendDeMessage();
+                }else{
+                    sendDeSecretMessage();
+                }
+            }
+        });
+    }
+
+    private void sendDeSecretMessage() {
+        String mess = typeamessage.getText().toString();
+        Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MessagesActivity.this)
+                .getApiConnector()
+                .sendsecretM(simu, mess);
+        call.enqueue(new Callback<SignUpMessagesModel>() {
+            @Override
+            public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                if (response.code()==201) {
+                    typeamessage.getText().clear();
+                    Intent intent = new Intent(MessagesActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(MessagesActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MessagesActivity.this, "Server error", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                Toast.makeText(MessagesActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void viewSecret() {
+        mMessagesArrayList.clear();
+        Call<List<MessagesModel>> call = RetrofitClient.getInstance(MessagesActivity.this)
+                .getApiConnector()
+                .getsecretM(chat_id);
+        call.enqueue(new Callback<List<MessagesModel>>() {
+            @Override
+            public void onResponse(Call<List<MessagesModel>> call, Response<List<MessagesModel>> response) {
+
+                // hideProgress();
+                if(response.code()==200){
+                    mMessagesArrayList.addAll(response.body());
+                    messagesAdapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(MessagesActivity.this,"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<MessagesModel>> call, Throwable t) {
+
+                // hideProgress();
+                Toast.makeText(MessagesActivity.this,"Network error",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -96,8 +170,13 @@ public class MessagesActivity extends AppCompatActivity {
         call.enqueue(new Callback<SignUpMessagesModel>() {
             @Override
             public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(MessagesActivity.this, "Message sent", Toast.LENGTH_LONG).show();
+                if (response.code()==201) {
+                    typeamessage.getText().clear();
+                    Intent intent = new Intent(MessagesActivity.this,MainActivity.class);
+                    intent.putExtra(MESS,true);
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(MessagesActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(MessagesActivity.this, "Server error", Toast.LENGTH_LONG).show();
                 }
@@ -112,6 +191,7 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     private void viewMessages() {
+        mMessagesArrayList.clear();
         Call<List<MessagesModel>> call = RetrofitClient.getInstance(MessagesActivity.this)
                 .getApiConnector()
                 .getM(chat_id);

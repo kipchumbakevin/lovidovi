@@ -1,6 +1,10 @@
 package com.example.lovidovi.ui;
 
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -8,11 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +45,8 @@ public class MessagesFragment extends Fragment {
     private ArrayList<ChatsModel>mMessagesArrayList = new ArrayList<>();
     ChatsAdapter chatsAdapter;
     SharedPreferencesConfig sharedPreferencesConfig;
+    private final int REQUEST_CODE=99;
+    EditText pp;
 
 
     public MessagesFragment() {
@@ -54,7 +62,7 @@ public class MessagesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.messagesrecycler);
         chatsAdapter = new ChatsAdapter(getActivity(),mMessagesArrayList);
         recyclerView.setAdapter(chatsAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getResources().getInteger(R.integer.product_grid_span)));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         sharedPreferencesConfig = new SharedPreferencesConfig(getActivity());
         FloatingActionButton floatingActionButton = view.findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -72,13 +80,35 @@ public class MessagesFragment extends Fragment {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         View view = getLayoutInflater().inflate(R.layout.addmessage, null);
         final EditText message = view.findViewById(R.id.messageM);
-        final EditText pp = view.findViewById(R.id.phoneP);
+        ImageView contacts = view.findViewById(R.id.gotocontacts);
+         pp = view.findViewById(R.id.phoneP);
         cancel = view.findViewById(R.id.cancel);
         send = view.findViewById(R.id.done);
 
         alertDialogBuilder.setView(view);
         final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+        message.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                message.setTextIsSelectable(true);
+                return false;
+            }
+        });
+        pp.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                pp.setTextIsSelectable(true);
+                return false;
+            }
+        });
+        contacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,9 +132,12 @@ public class MessagesFragment extends Fragment {
                     call.enqueue(new Callback<SignUpMessagesModel>() {
                         @Override
                         public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
-                            if (response.isSuccessful()) {
+                            if (response.code() == 201) {
+                                Intent intent = new Intent(getActivity(),MainActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
                                 alertDialog.dismiss();
-                                Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(getActivity(), "Server error", Toast.LENGTH_LONG).show();
                             }
@@ -119,6 +152,30 @@ public class MessagesFragment extends Fragment {
                 }
             }
         });
+    }
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        switch (reqCode) {
+            case (REQUEST_CODE):
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor c = getActivity().getContentResolver().query(contactData, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String contactId = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+                        String hasNumber = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        String num = "";
+                        if (Integer.valueOf(hasNumber) == 1) {
+                            Cursor numbers = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                            while (numbers.moveToNext()) {
+                                num = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                pp.setText(num);
+                            }
+                        }
+                    }
+                    break;
+                }
+        }
     }
 
             private void viewMessages() {
@@ -138,7 +195,6 @@ public class MessagesFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<List<ChatsModel>> call, Throwable t) {
-                        Log.d("lll", "failed " + t.getMessage());
                         Toast.makeText(getActivity(), "Network error", Toast.LENGTH_SHORT).show();
                     }
 

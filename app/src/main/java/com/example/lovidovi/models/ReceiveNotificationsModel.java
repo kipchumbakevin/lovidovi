@@ -10,9 +10,9 @@ public class ReceiveNotificationsModel {
     @SerializedName("notification")
     @Expose
     private String notification;
-    @SerializedName("sender_id")
+    @SerializedName("sender_phone")
     @Expose
-    private Integer senderId;
+    private String senderPhone;
     @SerializedName("receiver_phone")
     @Expose
     private String receiverPhone;
@@ -42,12 +42,12 @@ public class ReceiveNotificationsModel {
         this.notification = notification;
     }
 
-    public Integer getSenderId() {
-        return senderId;
+    public String getSenderPhone() {
+        return senderPhone;
     }
 
-    public void setSenderId(Integer senderId) {
-        this.senderId = senderId;
+    public void setSenderPhone(String senderPhone) {
+        this.senderPhone = senderPhone;
     }
 
     public String getReceiverPhone() {

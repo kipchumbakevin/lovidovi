@@ -8,12 +8,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lovidovi.settings.ForgotPasswordActivity;
 import com.example.lovidovi.ui.MainActivity;
 import com.example.lovidovi.R;
 import com.example.lovidovi.models.UsersModel;
 import com.example.lovidovi.networking.RetrofitClient;
+import com.example.lovidovi.ui.SplashScreen;
 import com.example.lovidovi.utils.Constants;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
 
@@ -23,6 +26,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     EditText userName,pass;
+    TextView forgotPass;
     Button login,signup;
     private String clientsName,clientsUsername,clientsPhone,accessToken,clientsId;
     private SharedPreferencesConfig sharedPreferencesConfig;
@@ -33,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         signup = findViewById(R.id.gotosignup);
         login = findViewById(R.id.button_login);
-        //forgotPass = findViewById(R.id.forgotPassword);
+        forgotPass = findViewById(R.id.forgotPassword);
         userName = findViewById(R.id.logusername);
        // progressLyt = findViewById(R.id.progressLoad);
         sharedPreferencesConfig = new SharedPreferencesConfig(LoginActivity.this);
@@ -63,14 +67,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-//        forgotPass.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
     @Override
     protected void onResume() {
@@ -79,7 +83,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if (sharedPreferencesConfig.isloggedIn()){
            // Toast.makeText(LoginActivity.this,sharedPreferencesConfig.readClientsId(),Toast.LENGTH_LONG).show();
-            welcome();
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
     private void loginUser() {
@@ -118,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     public void welcome(){
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, SplashScreen.class);
         startActivity(intent);
         finish();
     }

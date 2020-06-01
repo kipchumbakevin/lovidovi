@@ -47,11 +47,9 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.QuotesView
 
     public class QuotesViewHolder extends RecyclerView.ViewHolder {
         TextView quote;
-        ImageView like;
         public QuotesViewHolder(@NonNull View itemView) {
             super(itemView);
             quote = itemView.findViewById(R.id.viewQuote);
-            like = itemView.findViewById(R.id.like);
         }
     }
 }

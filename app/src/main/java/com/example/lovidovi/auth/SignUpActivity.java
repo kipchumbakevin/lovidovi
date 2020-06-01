@@ -20,7 +20,7 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     EditText name,username,phone,password,confirm;
-    Button signup;
+    Button signup,login;
     SharedPreferencesConfig sharedPreferencesConfig;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +29,19 @@ public class SignUpActivity extends AppCompatActivity {
         signup = findViewById(R.id.button_sign);
         name = findViewById(R.id.name);
         username = findViewById(R.id.username);
+        login = findViewById(R.id.login);
         phone = findViewById(R.id.phone);
         password = findViewById(R.id.pass);
         confirm = findViewById(R.id.confirmpass);
 
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

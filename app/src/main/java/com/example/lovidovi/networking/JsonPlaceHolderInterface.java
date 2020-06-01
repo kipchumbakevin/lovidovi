@@ -1,6 +1,11 @@
 package com.example.lovidovi.networking;
 
+import com.example.lovidovi.models.ChangeDetailsModel;
+import com.example.lovidovi.models.ChangedForgotPassModel;
 import com.example.lovidovi.models.ChatsModel;
+import com.example.lovidovi.models.ConfirmPhoneChangeCodeModel;
+import com.example.lovidovi.models.ForgotPasswordModel;
+import com.example.lovidovi.models.GenerateCodeModel;
 import com.example.lovidovi.models.MessagesModel;
 import com.example.lovidovi.models.QuotesModel;
 import com.example.lovidovi.models.ReceiveNotificationsModel;
@@ -60,12 +65,13 @@ public interface JsonPlaceHolderInterface {
     Call<List<MessagesModel>> getM(
             @Field("chat_id")String chat_id
     );
-//    @GET("api/fetchchats")
-//    Call<List<ChatsModel>> getChats(@Header("Authorization")String access_token);
-
     //fetch chats
     @GET("api/fetchchats")
     Call<List<ChatsModel>> getChats();
+
+//    @GET("api/fetchchats")
+//    Call<List<ChatsModel>> getChats(@Header("Authorization")String access_token);
+
 
     //getnotifications
     @FormUrlEncoded
@@ -76,7 +82,7 @@ public interface JsonPlaceHolderInterface {
     //unread notification
     @FormUrlEncoded
     @POST("api/unread")
-    Call<List<UnreadNotificationsModel>> unreadN(
+    Call<UnreadNotificationsModel> unreadN(
             @Field("phone")String phone
     );
     //notifycrush
@@ -89,4 +95,89 @@ public interface JsonPlaceHolderInterface {
     //getallquotes
     @GET("api/fetchquote")
     Call<List<QuotesModel>> getQuotes();
+
+    //add a quote
+
+    @FormUrlEncoded
+    @POST("api/insertquote")
+    Call<SignUpMessagesModel> addQuote(
+            @Field("quote")String quote
+    );
+
+    //secret messages
+    @FormUrlEncoded
+    @POST("api/sendsecret")
+    Call<SignUpMessagesModel> sendsecretM(
+            @Field("phone")String simu,
+            @Field("msg")String mess
+    );
+    @FormUrlEncoded
+    @POST("api/fetchsecret")
+    Call<List<MessagesModel>> getsecretM(
+            @Field("chat_id")String chat_id
+    );
+    @GET("api/fetchsecretchats")
+    Call<List<ChatsModel>> getsecretChats();
+    //read all notifications
+    @FormUrlEncoded
+    @POST("api/readnotifications")
+    Call<SignUpMessagesModel> readAllN(
+            @Field("phone")String phone
+    );
+
+
+
+
+    @FormUrlEncoded
+    @POST("api/changepassword")
+    Call<ChangedForgotPassModel> changePassword(
+            @Field("newpass")String newPass,
+            @Field("oldpass")String oldPass
+    );
+
+    @FormUrlEncoded
+    @POST("api/sendcode")
+    Call<ForgotPasswordModel> sendForgotCode(
+            @Field("phone")String newPass
+    );
+    @FormUrlEncoded
+    @POST("api/newpassword")
+    Call<ChangedForgotPassModel> newPass(
+            @Field("code")String code,
+            @Field("newpass")String newPass,
+            @Field("phone")String phone
+    );
+
+    @FormUrlEncoded
+    @POST("api/changedetails")
+    Call<ChangeDetailsModel> changeDetails(
+            @Field("username")String changed
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/checkphone")
+    Call<SignUpMessagesModel> checkIfNoCorrect(
+            @Field("oldphone")String oldphone,
+            @Field("pas")String pas,
+            @Field("newphone")String newnumber
+    );
+
+    @FormUrlEncoded
+    @POST("api/generatecode")
+    Call<GenerateCodeModel> generateCode(
+            @Field("oldphone")String oldphone,
+            @Field("appSignature")String appSignature
+    );
+    @FormUrlEncoded
+    @POST("api/changephone")
+    Call<ConfirmPhoneChangeCodeModel> changePhone(
+            @Field("newphone")String newphone,
+            @Field("oldphone")String oldphone,
+            @Field("code")String code
+    );
+
+    @GET("api/auth/logout")
+    Call<SignUpMessagesModel> logOut();
 }
+

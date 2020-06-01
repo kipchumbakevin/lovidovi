@@ -3,6 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
+    android:layout_marginTop="8dp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
         <TextView
@@ -10,6 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:paddingTop="20dp"
+            android:textIsSelectable="true"
             android:paddingStart="15dp"
             android:gravity="center_horizontal"
             android:background="@drawable/picpic"
@@ -17,13 +19,13 @@
             android:text="Quote"
             android:textColor="@color/colorBlack"
             android:textSize="15sp"/>
-        <ImageView
-            android:id="@+id/like"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="25dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_favorite"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/like"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginStart="25dp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_thumb"/>-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

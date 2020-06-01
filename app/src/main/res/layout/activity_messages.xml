@@ -9,8 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messagesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/jj"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:orientation="horizontal"
@@ -36,8 +34,8 @@
             android:drawableStart="@drawable/ic_sentiment"
             android:drawablePadding="10dp"
             android:hint="Type a message"
-            android:inputType="textCapSentences"
-            android:maxWidth="200dp"
+            android:inputType="text|textMultiLine|textCapSentences"
+            android:maxLines="7"
             android:padding="5dp"
             android:textColor="@color/colorBlack"
             android:textSize="15sp" />
