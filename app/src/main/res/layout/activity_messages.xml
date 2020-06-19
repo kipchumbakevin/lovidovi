@@ -31,12 +31,13 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext"
-            android:drawableStart="@drawable/ic_sentiment"
-            android:drawablePadding="10dp"
             android:hint="Type a message"
             android:inputType="text|textMultiLine|textCapSentences"
-            android:maxLines="7"
-            android:padding="5dp"
+            android:maxLines="15"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:textColor="@color/colorBlack"
             android:textSize="15sp" />
 
@@ -48,5 +49,6 @@
             android:src="@drawable/ic_send" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+    <include layout="@layout/content_progress_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

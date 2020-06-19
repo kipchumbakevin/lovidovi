@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     RecyclerView recyclerView;
+    RelativeLayout progressLyt;
     private ArrayList<QuotesModel>mQuotesArrayList = new ArrayList<>();
     QuotesAdapter quotesAdapter;
     FloatingActionButton floatingActionButton;
@@ -57,6 +59,7 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.quaotesrecyclerview);
         quotesAdapter = new QuotesAdapter(getActivity(),mQuotesArrayList);
         recyclerView.setAdapter(quotesAdapter);
+        progressLyt = view.findViewById(R.id.progressLoad);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getResources().getInteger(R.integer.product_grid_span)));
         floatingActionButton = view.findViewById(R.id.fab);
         viewQuotes();
@@ -77,6 +80,7 @@ public class HomeFragment extends Fragment {
         final EditText enterquote = view.findViewById(R.id.enterquote);
         cancel = view.findViewById(R.id.cancel);
         done = view.findViewById(R.id.done);
+        progressLyt = view.findViewById(R.id.progressLoad);
 
         alertDialogBuilder.setView(view);
         final AlertDialog alertDialog = alertDialogBuilder.create();
@@ -118,12 +122,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String quote = enterquote.getText().toString();
+                showProgress();
                 Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
                         .getApiConnector()
                         .addQuote(quote);
                 call.enqueue(new Callback<SignUpMessagesModel>() {
                     @Override
                     public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                        hideProgress();
                         if (response.code() == 201) {
                             Intent intent = new Intent(getActivity(),MainActivity.class);
                             startActivity(intent);
@@ -138,6 +144,7 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                        hideProgress();
                         Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -146,6 +153,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void viewQuotes() {
+        showProgress();
         mQuotesArrayList.clear();
         Call<List<QuotesModel>> call = RetrofitClient.getInstance(getActivity())
                 .getApiConnector()
@@ -153,21 +161,30 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<QuotesModel>>() {
             @Override
             public void onResponse(Call<List<QuotesModel>> call, Response<List<QuotesModel>> response) {
+                hideProgress();
                 if (response.isSuccessful()) {
                     mQuotesArrayList.addAll(response.body());
                     quotesAdapter.notifyDataSetChanged();
                 }
                 else {
-                    Toast.makeText(getActivity(),"Server error",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getActivity(),"Server error",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<QuotesModel>> call, Throwable t) {
-                Toast.makeText(getActivity(),"Network error",Toast.LENGTH_SHORT).show();
+                hideProgress();
+              //  Toast.makeText(getActivity(),"Network error",Toast.LENGTH_SHORT).show();
             }
 
         });
+    }
+    private void hideProgress() {
+        progressLyt.setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgress() {
+        progressLyt.setVisibility(View.VISIBLE);
     }
 
 }

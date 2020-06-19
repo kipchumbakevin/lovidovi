@@ -19,13 +19,13 @@
             android:text="Quote"
             android:textColor="@color/colorBlack"
             android:textSize="15sp"/>
-        <!--<ImageView-->
-            <!--android:id="@+id/like"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_marginStart="25dp"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/ic_thumb"/>-->
+        <ImageView
+            android:id="@+id/share"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_share"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

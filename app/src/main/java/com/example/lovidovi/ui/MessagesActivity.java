@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.lovidovi.R;
@@ -37,6 +38,7 @@ public class MessagesActivity extends AppCompatActivity {
     private static final String KNOW = "com.example.lovidovi.adapters";
     ImageView send;
     EditText typeamessage;
+    RelativeLayout progressLyt;
     private static final String MESS ="com.example.lovidovi.ui";
     private Boolean reset = false;
 
@@ -47,6 +49,7 @@ public class MessagesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.messagesRecyclerView);
         messagesAdapter = new MessagesAdapter(MessagesActivity.this,mMessagesArrayList);
         recyclerView.setAdapter(messagesAdapter);
+        progressLyt = findViewById(R.id.progressLoad);
         typeamessage = findViewById(R.id.typeamessage);
         send = findViewById(R.id.sendthemsg);
         chat_id = getIntent().getExtras().getString("CHATID");
@@ -109,12 +112,14 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void sendDeSecretMessage() {
         String mess = typeamessage.getText().toString();
+        showProgress();
         Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MessagesActivity.this)
                 .getApiConnector()
                 .sendsecretM(simu, mess);
         call.enqueue(new Callback<SignUpMessagesModel>() {
             @Override
             public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                hideProgress();
                 if (response.code()==201) {
                     typeamessage.getText().clear();
                     Intent intent = new Intent(MessagesActivity.this,MainActivity.class);
@@ -128,6 +133,7 @@ public class MessagesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                hideProgress();
                 Toast.makeText(MessagesActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
             }
         });
@@ -142,8 +148,9 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<MessagesModel>> call, Response<List<MessagesModel>> response) {
 
-                // hideProgress();
+                 hideProgress();
                 if(response.code()==200){
+                    reeead();
                     mMessagesArrayList.addAll(response.body());
                     messagesAdapter.notifyDataSetChanged();
                 }
@@ -156,20 +163,45 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<MessagesModel>> call, Throwable t) {
 
-                // hideProgress();
+                 hideProgress();
                 Toast.makeText(MessagesActivity.this,"Network error",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void reeead() {
+        Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MessagesActivity.this)
+                .getApiConnector()
+                .readSS(chat_id);
+        call.enqueue(new Callback<SignUpMessagesModel>() {
+            @Override
+            public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                if (response.code() == 201) {
+
+                } else {
+                    // Toast.makeText(getActivity(), "Server error", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+
+                //Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void sendDeMessage() {
         String mess = typeamessage.getText().toString();
+        showProgress();
         Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MessagesActivity.this)
                 .getApiConnector()
                 .sendM(phone, mess);
         call.enqueue(new Callback<SignUpMessagesModel>() {
             @Override
             public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                hideProgress();
                 if (response.code()==201) {
                     typeamessage.getText().clear();
                     Intent intent = new Intent(MessagesActivity.this,MainActivity.class);
@@ -185,6 +217,7 @@ public class MessagesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                hideProgress();
                 Toast.makeText(MessagesActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
             }
         });
@@ -192,6 +225,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void viewMessages() {
         mMessagesArrayList.clear();
+        showProgress();
         Call<List<MessagesModel>> call = RetrofitClient.getInstance(MessagesActivity.this)
                 .getApiConnector()
                 .getM(chat_id);
@@ -199,8 +233,9 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<MessagesModel>> call, Response<List<MessagesModel>> response) {
 
-                // hideProgress();
+                 hideProgress();
                 if(response.code()==200){
+                    read();
                     mMessagesArrayList.addAll(response.body());
                     messagesAdapter.notifyDataSetChanged();
                 }
@@ -213,10 +248,41 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<MessagesModel>> call, Throwable t) {
 
-                // hideProgress();
+                 hideProgress();
                 Toast.makeText(MessagesActivity.this,"Network error",Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    private void read() {
+        Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MessagesActivity.this)
+                .getApiConnector()
+                .readMM(chat_id);
+        call.enqueue(new Callback<SignUpMessagesModel>() {
+            @Override
+            public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                if (response.code() == 201) {
+
+                } else {
+                    // Toast.makeText(getActivity(), "Server error", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+
+                //Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void hideProgress() {
+        progressLyt.setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgress() {
+        progressLyt.setVisibility(View.VISIBLE);
     }
 }

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class MessagesFragment extends Fragment {
     ChatsAdapter chatsAdapter;
     SharedPreferencesConfig sharedPreferencesConfig;
     private final int REQUEST_CODE=99;
+    RelativeLayout progressLyt;
     EditText pp;
 
 
@@ -60,6 +62,7 @@ public class MessagesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
         recyclerView = view.findViewById(R.id.messagesrecycler);
+        progressLyt = view.findViewById(R.id.progressLoad);
         chatsAdapter = new ChatsAdapter(getActivity(),mMessagesArrayList);
         recyclerView.setAdapter(chatsAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
@@ -82,6 +85,7 @@ public class MessagesFragment extends Fragment {
         final EditText message = view.findViewById(R.id.messageM);
         ImageView contacts = view.findViewById(R.id.gotocontacts);
          pp = view.findViewById(R.id.phoneP);
+         progressLyt = view.findViewById(R.id.progressLoad);
         cancel = view.findViewById(R.id.cancel);
         send = view.findViewById(R.id.done);
 
@@ -126,12 +130,14 @@ public class MessagesFragment extends Fragment {
                 } else {
                     String phone = pp.getText().toString();
                     String mess = message.getText().toString();
+                    showProgress();
                     Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
                             .getApiConnector()
                             .sendM(phone, mess);
                     call.enqueue(new Callback<SignUpMessagesModel>() {
                         @Override
                         public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                            hideProgress();
                             if (response.code() == 201) {
                                 Intent intent = new Intent(getActivity(),MainActivity.class);
                                 startActivity(intent);
@@ -139,14 +145,15 @@ public class MessagesFragment extends Fragment {
                                 alertDialog.dismiss();
                                 Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getActivity(), "Server error", Toast.LENGTH_LONG).show();
+                               // Toast.makeText(getActivity(), "Server error", Toast.LENGTH_LONG).show();
                             }
 
                         }
 
                         @Override
                         public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
-                            Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                            hideProgress();
+                            //Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -179,25 +186,35 @@ public class MessagesFragment extends Fragment {
     }
 
             private void viewMessages() {
+        showProgress();
                 Call<List<ChatsModel>> call = RetrofitClient.getInstance(getActivity())
                         .getApiConnector()
                         .getChats();
                 call.enqueue(new Callback<List<ChatsModel>>() {
                     @Override
                     public void onResponse(Call<List<ChatsModel>> call, Response<List<ChatsModel>> response) {
+                        hideProgress();
                         if (response.isSuccessful()) {
                             mMessagesArrayList.addAll(response.body());
                             chatsAdapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(getActivity(), "Server error " + response.message(), Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getActivity(), "Server error " + response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<ChatsModel>> call, Throwable t) {
+                        hideProgress();
                         Toast.makeText(getActivity(), "Network error", Toast.LENGTH_SHORT).show();
                     }
 
                 });
             }
+    private void hideProgress() {
+        progressLyt.setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgress() {
+        progressLyt.setVisibility(View.VISIBLE);
+    }
 }

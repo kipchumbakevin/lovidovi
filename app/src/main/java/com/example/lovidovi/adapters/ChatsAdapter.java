@@ -6,21 +6,31 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lovidovi.R;
 import com.example.lovidovi.models.ChatsModel;
+import com.example.lovidovi.models.SignUpMessagesModel;
+import com.example.lovidovi.networking.RetrofitClient;
+import com.example.lovidovi.ui.MainActivity;
 import com.example.lovidovi.ui.MessagesActivity;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesViewHolder> {
     private static final String KNOW = "com.example.lovidovi.adapters";
     private final Context mContext;
+    private final boolean mmm = false;
     private final ArrayList<ChatsModel> mMessagesArrayList;
     private final LayoutInflater mLayoutInflator;
 
@@ -40,6 +50,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
     public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
         SharedPreferencesConfig sharedPreferencesConfig = new SharedPreferencesConfig(mContext);
         ChatsModel chatsModel = mMessagesArrayList.get(position);
+        Toast.makeText(mContext, sharedPreferencesConfig.readClientsName() + " "+chatsModel.getReceiver().getReceiverId(), Toast.LENGTH_SHORT).show();
+        if (chatsModel.getReceiver()!=null && chatsModel.getReceiver().getReceiverId().equals(sharedPreferencesConfig.readClientsName()) && chatsModel.getReceiver().getReceiverRead()==0){
+            holder.unread.setVisibility(View.VISIBLE);
+        }
         if (chatsModel.getParticipant()== null && !chatsModel.getParticipantId().equals(sharedPreferencesConfig.readClientsName())){
             holder.username.setText(chatsModel.getParticipantId());
             holder.pp = chatsModel.getParticipantId();
@@ -70,16 +84,19 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
 
     public class MessagesViewHolder extends RecyclerView.ViewHolder {
         int mcurrentposition;
-        String id,tt,pp;
+        String id,tt,pp,ss;
         TextView username,sample;
+        ImageView unread;
         public MessagesViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.sender_username);
             sample = itemView.findViewById(R.id.sample);
+            unread = itemView.findViewById(R.id.unreadmessage);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    unread.setVisibility(View.GONE);
                     Intent intent = new Intent(mContext, MessagesActivity.class);
                     intent.putExtra("CHATID",id);
                     intent.putExtra("USERNAME",username.getText().toString());

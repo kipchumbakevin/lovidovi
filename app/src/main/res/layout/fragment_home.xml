@@ -26,5 +26,6 @@
         android:paddingBottom="73dp"
         android:layout_marginTop="20dp"/>
     <include layout="@layout/floatingaction"/>
+    <include layout="@layout/content_progress_bar"/>
 
 </FrameLayout>

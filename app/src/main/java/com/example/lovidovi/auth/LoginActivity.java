@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +17,6 @@ import com.example.lovidovi.ui.MainActivity;
 import com.example.lovidovi.R;
 import com.example.lovidovi.models.UsersModel;
 import com.example.lovidovi.networking.RetrofitClient;
-import com.example.lovidovi.ui.SplashScreen;
 import com.example.lovidovi.utils.Constants;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
 
@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     Button login,signup;
     private String clientsName,clientsUsername,clientsPhone,accessToken,clientsId;
     private SharedPreferencesConfig sharedPreferencesConfig;
+    RelativeLayout progressLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.button_login);
         forgotPass = findViewById(R.id.forgotPassword);
         userName = findViewById(R.id.logusername);
-       // progressLyt = findViewById(R.id.progressLoad);
+        progressLyt = findViewById(R.id.progressLoad);
         sharedPreferencesConfig = new SharedPreferencesConfig(LoginActivity.this);
         pass = findViewById(R.id.logpass);
 
@@ -83,13 +84,11 @@ public class LoginActivity extends AppCompatActivity {
 
         if (sharedPreferencesConfig.isloggedIn()){
            // Toast.makeText(LoginActivity.this,sharedPreferencesConfig.readClientsId(),Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-            startActivity(intent);
-            finish();
+            welcome();
         }
     }
     private void loginUser() {
-      //  showProgress();
+        showProgress();
         String username = userName.getText().toString();
         String password = pass.getText().toString();
         Call<UsersModel> call = RetrofitClient.getInstance(LoginActivity.this)
@@ -98,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<UsersModel>() {
             @Override
             public void onResponse(Call<UsersModel> call, Response<UsersModel> response) {
-               // hideProgress();
+                hideProgress();
                 if(response.isSuccessful()){
                   //  String mmm =  Integer.toString(response.body().getUser().getId());
                     accessToken = response.body().getAccessToken();
@@ -118,22 +117,22 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UsersModel> call, Throwable t) {
-              //  hideProgress();
+                hideProgress();
                 Toast.makeText(LoginActivity.this,t.getMessage()+"error",Toast.LENGTH_LONG).show();
             }
         });
     }
     public void welcome(){
-        Intent intent = new Intent(LoginActivity.this, SplashScreen.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
-//    private void hideProgress() {
-//        progressLyt.setVisibility(View.INVISIBLE);
-//    }
-//
-//    private void showProgress() {
-//        progressLyt.setVisibility(View.VISIBLE);
-//    }
+    private void hideProgress() {
+        progressLyt.setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgress() {
+        progressLyt.setVisibility(View.VISIBLE);
+    }
 
 }

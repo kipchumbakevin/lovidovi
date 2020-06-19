@@ -1,6 +1,7 @@
 package com.example.lovidovi.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,9 +48,22 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.QuotesView
 
     public class QuotesViewHolder extends RecyclerView.ViewHolder {
         TextView quote;
+        ImageView share;
         public QuotesViewHolder(@NonNull View itemView) {
             super(itemView);
             quote = itemView.findViewById(R.id.viewQuote);
+            share = itemView.findViewById(R.id.share);
+
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    String shareBody = quote.getText().toString();
+                    intent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                    mContext.startActivity(Intent.createChooser(intent, "Share via"));
+                }
+            });
         }
     }
 }

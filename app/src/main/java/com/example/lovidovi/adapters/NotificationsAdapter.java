@@ -2,6 +2,7 @@ package com.example.lovidovi.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -61,6 +62,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             holder.constraintLayout.setBackground(trans);
         }
         holder.phone = receiveNotificationsModel.getSenderPhone();
+        holder.item_id = receiveNotificationsModel.getId();
 
     }
 
@@ -72,12 +74,68 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public class NotificationsViewHolders extends RecyclerView.ViewHolder {
         TextView notification,sendText;
         String phone;
+        ImageView delete;
+        int item_id;
         ConstraintLayout constraintLayout;
         public NotificationsViewHolders(@NonNull View itemView) {
             super(itemView);
             notification = itemView.findViewById(R.id.notify);
             sendText = itemView.findViewById(R.id.sendText);
+            delete = itemView.findViewById(R.id.delete);
             constraintLayout = itemView.findViewById(R.id.constr);
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    delete.setVisibility(View.VISIBLE);
+                    constraintLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrayy));
+                    return false;
+                }
+            });
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("Delete")
+                            .setMessage("Are you sure you want to delete?")
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    String id = Integer.toString(item_id);
+                                    Call<SignUpMessagesModel> call = RetrofitClient.getInstance(mContext)
+                                            .getApiConnector()
+                                            .deleteNott(id);
+                                    call.enqueue(new Callback<SignUpMessagesModel>() {
+                                        @Override
+                                        public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                                            if (response.code() == 201) {
+                                                Intent intent = new Intent(mContext, MainActivity.class);
+                                                mContext.startActivity(intent);
+                                                ((Activity) mContext).finish();
+                                                Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Toast.makeText(mContext, "Server error", Toast.LENGTH_LONG).show();
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                                            Toast.makeText(mContext, t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                }
+            });
 
             sendText.setOnClickListener(new View.OnClickListener() {
                 @Override

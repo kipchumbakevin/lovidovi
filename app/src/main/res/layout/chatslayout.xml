@@ -3,7 +3,18 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:padding="10dp"
     android:layout_height="wrap_content">
+    <ImageView
+
+        android:layout_marginTop="5dp"
+        android:layout_width="40dp"
+
+        android:src="@mipmap/ic_launcher_round"
+
+        android:layout_gravity="center"
+
+        android:layout_height="40dp" />
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_marginStart="65dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -25,17 +36,14 @@
             android:textSize="10sp"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-    <TextView
+    <ImageView
+        android:id="@+id/unreadmessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5"
         android:visibility="gone"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="18dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:textSize="15sp"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/item_count"/>
+        android:src="@drawable/ic_brightness"
+        android:layout_marginEnd="20dp"/>
 
 </RelativeLayout>

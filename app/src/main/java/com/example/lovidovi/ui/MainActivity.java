@@ -71,23 +71,25 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().hasExtra(MESS)){
             reset = getIntent().getBooleanExtra(MESS, false);
         }
-        if (reset){
-           inboxLoad();
-        }else{
-            homeload();
-        }
         unreadNo();
+        unreadIn();
+        unreadSe();
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 homeload();
                 unreadNo();
+                unreadIn();
+                unreadSe();
             }
         });
         secret.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 secretLoad();
+                unreadNo();
+                unreadIn();
+                unreadSecret.setVisibility(View.GONE);
             }
         });
         inbox.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 dd = 1;
                 inboxLoad();
+                unreadNo();
+                unreadSe();
+                unreadInbox.setVisibility(View.GONE);
             }
         });
         if (dd==1){
@@ -109,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 notificationLoad();
+                unreadIn();
+                unreadSe();
+                unreadNot.setVisibility(View.GONE);
             }
         });
 
@@ -124,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void unreadNo() {
         final String phone = sharedPreferencesConfig.readClientsPhone();
-        Toast.makeText(MainActivity.this,phone,Toast.LENGTH_LONG).show();
         Call<UnreadNotificationsModel> call = RetrofitClient.getInstance(MainActivity.this)
                 .getApiConnector()
                 .unreadN(phone);
@@ -140,13 +147,67 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else {
-                    Toast.makeText(MainActivity.this,"Server error",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this,"Server error",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<UnreadNotificationsModel> call, Throwable t) {
-                Toast.makeText(MainActivity.this,"Network error"+t.getMessage(),Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this,"Network error"+t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+    private void unreadIn() {
+        Call<UnreadNotificationsModel> call = RetrofitClient.getInstance(MainActivity.this)
+                .getApiConnector()
+                .unreadI();
+        call.enqueue(new Callback<UnreadNotificationsModel>() {
+            @Override
+            public void onResponse(Call<UnreadNotificationsModel> call, Response<UnreadNotificationsModel> response) {
+                if (response.code()==201) {
+                    if (response.body().getNum()>0){
+                        unreadInbox.setVisibility(View.VISIBLE);
+                        unreadInbox.setText(response.body().getNum()+"");
+                    }
+
+
+                }
+                else {
+                   // Toast.makeText(MainActivity.this,"Server error",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UnreadNotificationsModel> call, Throwable t) {
+                //Toast.makeText(MainActivity.this,"Network error"+t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+    private void unreadSe() {
+        Call<UnreadNotificationsModel> call = RetrofitClient.getInstance(MainActivity.this)
+                .getApiConnector()
+                .unreadS();
+        call.enqueue(new Callback<UnreadNotificationsModel>() {
+            @Override
+            public void onResponse(Call<UnreadNotificationsModel> call, Response<UnreadNotificationsModel> response) {
+                if (response.code()==201) {
+                    if (response.body().getNum()>0){
+                        unreadSecret.setVisibility(View.VISIBLE);
+                        unreadSecret.setText(response.body().getNum()+"");
+                    }
+
+
+                }
+                else {
+                   // Toast.makeText(MainActivity.this,"Server error",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UnreadNotificationsModel> call, Throwable t) {
+                //Toast.makeText(MainActivity.this,"Network error"+t.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
         });

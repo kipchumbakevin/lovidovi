@@ -65,6 +65,14 @@ public interface JsonPlaceHolderInterface {
     Call<List<MessagesModel>> getM(
             @Field("chat_id")String chat_id
     );
+    //read unread messages
+    @FormUrlEncoded
+    @POST("api/readmessageunread")
+    Call<SignUpMessagesModel> readMM(
+            @Field("chat_id")String chat_id
+    );
+    @GET("api/fetchunreadmessages")
+    Call<UnreadNotificationsModel> unreadI();
     //fetch chats
     @GET("api/fetchchats")
     Call<List<ChatsModel>> getChats();
@@ -84,6 +92,11 @@ public interface JsonPlaceHolderInterface {
     @POST("api/unread")
     Call<UnreadNotificationsModel> unreadN(
             @Field("phone")String phone
+    );
+    @FormUrlEncoded
+    @POST("api/deletenot")
+    Call<SignUpMessagesModel> deleteNott(
+            @Field("id")String id
     );
     //notifycrush
     @FormUrlEncoded
@@ -111,11 +124,19 @@ public interface JsonPlaceHolderInterface {
             @Field("phone")String simu,
             @Field("msg")String mess
     );
+    //read secret
+    @FormUrlEncoded
+    @POST("api/readsecretmessageunread")
+    Call<SignUpMessagesModel> readSS(
+            @Field("chat_id")String id
+    );
     @FormUrlEncoded
     @POST("api/fetchsecret")
     Call<List<MessagesModel>> getsecretM(
             @Field("chat_id")String chat_id
     );
+    @GET("api/fetchunreadsecret")
+    Call<UnreadNotificationsModel> unreadS();
     @GET("api/fetchsecretchats")
     Call<List<ChatsModel>> getsecretChats();
     //read all notifications

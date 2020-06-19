@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.lovidovi.R;
@@ -22,6 +23,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText name,username,phone,password,confirm;
     Button signup,login;
     SharedPreferencesConfig sharedPreferencesConfig;
+    RelativeLayout progressLyt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
         signup = findViewById(R.id.button_sign);
         name = findViewById(R.id.name);
         username = findViewById(R.id.username);
+        progressLyt = findViewById(R.id.progressLoad);
         login = findViewById(R.id.login);
         phone = findViewById(R.id.phone);
         password = findViewById(R.id.pass);
@@ -60,12 +63,14 @@ public class SignUpActivity extends AppCompatActivity {
         if (!passN.equals(confirmPassN)){
             Toast.makeText(SignUpActivity.this,"Passwords do not match",Toast.LENGTH_LONG).show();
         }else {
+            showProgress();
             Call<SignUpMessagesModel> call = RetrofitClient.getInstance(SignUpActivity.this)
                     .getApiConnector()
                     .checkIfExist(phoneN, userN);
             call.enqueue(new Callback<SignUpMessagesModel>() {
                 @Override
                 public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                    hideProgress();
                     if (response.code() == 201) {
                         Intent intent = new Intent(SignUpActivity.this, CodeVerificationActivity.class);
                         intent.putExtra("NAME",nameN);
@@ -84,10 +89,18 @@ public class SignUpActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                    hideProgress();
                     Toast.makeText(SignUpActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
                 }
             });
         }
 
+    }
+    private void hideProgress() {
+        progressLyt.setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgress() {
+        progressLyt.setVisibility(View.VISIBLE);
     }
 }

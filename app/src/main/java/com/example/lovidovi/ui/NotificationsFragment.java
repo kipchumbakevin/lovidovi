@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class NotificationsFragment extends Fragment {
     SharedPreferencesConfig sharedPreferencesConfig;
     private final int REQUEST_CODE=99;
     EditText enterNum;
+    RelativeLayout progressLyt;
 
 
     public NotificationsFragment() {
@@ -64,6 +66,7 @@ public class NotificationsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.notificationsrecycler);
         notificationsAdapter = new NotificationsAdapter(getActivity(),mNotificationsArrayList);
         recyclerView.setAdapter(notificationsAdapter);
+        progressLyt = view.findViewById(R.id.progressLoad);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         sharedPreferencesConfig = new SharedPreferencesConfig(getActivity());
         floatingActionButton = view.findViewById(R.id.fab);
@@ -89,14 +92,14 @@ public class NotificationsFragment extends Fragment {
             public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
                 if (response.code() == 201) {
                 } else {
-                    Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
 
             @Override
             public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
-                Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -109,6 +112,7 @@ public class NotificationsFragment extends Fragment {
         ImageView contacts = view.findViewById(R.id.gotocontacts);
         cancel = view.findViewById(R.id.cancel);
         done = view.findViewById(R.id.done);
+        progressLyt = view.findViewById(R.id.progressLoad);
 
         alertDialogBuilder.setView(view);
         final AlertDialog alertDialog = alertDialogBuilder.create();
@@ -120,24 +124,27 @@ public class NotificationsFragment extends Fragment {
                     enterNum.setError("Required");
                 }else {
                     String phone = enterNum.getText().toString();
+                    showProgress();
                     Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
                             .getApiConnector()
                             .notifyCrush(phone);
                     call.enqueue(new Callback<SignUpMessagesModel>() {
                         @Override
                         public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                            hideProgress();
                             if (response.code() == 200) {
                                 alertDialog.dismiss();
                                 Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                             }
 
                         }
 
                         @Override
                         public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
-                            Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                            hideProgress();
+                           // Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -185,6 +192,8 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void viewNotifications() {
+        mNotificationsArrayList.clear();
+        showProgress();
         final String phone = sharedPreferencesConfig.readClientsPhone();
         Call<List<ReceiveNotificationsModel>> call = RetrofitClient.getInstance(getActivity())
                 .getApiConnector()
@@ -193,13 +202,13 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<ReceiveNotificationsModel>> call, Response<List<ReceiveNotificationsModel>> response) {
 
-               // hideProgress();
+                hideProgress();
                 if(response.code()==200){
                     mNotificationsArrayList.addAll(response.body());
                     notificationsAdapter.notifyDataSetChanged();
                 }
                 else{
-                    Toast.makeText(getActivity(),"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getActivity(),"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -207,10 +216,17 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onFailure(Call<List<ReceiveNotificationsModel>> call, Throwable t) {
 
-               // hideProgress();
-                Toast.makeText(getContext(),"Network error",Toast.LENGTH_SHORT).show();
+                hideProgress();
+               // Toast.makeText(getContext(),"Network error",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void hideProgress() {
+        progressLyt.setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgress() {
+        progressLyt.setVisibility(View.VISIBLE);
     }
 
 }
