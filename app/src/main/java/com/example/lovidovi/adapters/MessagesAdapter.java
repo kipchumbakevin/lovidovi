@@ -5,6 +5,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,8 +43,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             holder.sent.setVisibility(View.VISIBLE);
             holder.received.setVisibility(View.GONE);
             holder.sent.setText(messagesModel.getMessage());
-        }else{
+            if (messagesModel.getReceiverRead()==1){
+                holder.read.setVisibility(View.VISIBLE);
+            }else {
+                holder.alreadysent.setVisibility(View.VISIBLE);
+            }
+        }
+        else{
             holder.received.setVisibility(View.VISIBLE);
+            holder.read.setVisibility(View.GONE);
+            holder.alreadysent.setVisibility(View.GONE);
             holder.sent.setVisibility(View.GONE);
             holder.received.setText(messagesModel.getMessage());
         }
@@ -59,12 +68,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
     public class MessagesViewHolder extends RecyclerView.ViewHolder {
         String iii;
-
+        ImageView alreadysent,read;
         TextView received,sent;
         public MessagesViewHolder(@NonNull View itemView) {
             super(itemView);
             received = itemView.findViewById(R.id.received_text);
             sent = itemView.findViewById(R.id.sent_text);
+            alreadysent = itemView.findViewById(R.id.senttext);
+            read = itemView.findViewById(R.id.readtext);
         }
     }
 }

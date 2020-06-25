@@ -50,7 +50,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
     public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
         SharedPreferencesConfig sharedPreferencesConfig = new SharedPreferencesConfig(mContext);
         ChatsModel chatsModel = mMessagesArrayList.get(position);
-        Toast.makeText(mContext, sharedPreferencesConfig.readClientsName() + " "+chatsModel.getReceiver().getReceiverId(), Toast.LENGTH_SHORT).show();
         if (chatsModel.getReceiver()!=null && chatsModel.getReceiver().getReceiverId().equals(sharedPreferencesConfig.readClientsName()) && chatsModel.getReceiver().getReceiverRead()==0){
             holder.unread.setVisibility(View.VISIBLE);
         }

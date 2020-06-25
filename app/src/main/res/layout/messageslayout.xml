@@ -20,21 +20,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="received"/>
-    <TextView
-        android:id="@+id/sent_text"
-        android:padding="5dp"
-        android:textIsSelectable="true"
-        android:layout_width="wrap_content"
-        android:minWidth="100dp"
-        android:textColor="@color/colorBlack"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/textviewsent"
-        android:maxWidth="300dp"
-        android:textSize="15sp"
-        android:layout_marginEnd="5dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/received_text"
-        android:text="sent"/>
+        <TextView
+            android:id="@+id/sent_text"
+            android:padding="5dp"
+            android:textIsSelectable="true"
+            android:layout_width="wrap_content"
+            android:minWidth="100dp"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/textviewsent"
+            android:maxWidth="300dp"
+            android:textSize="15sp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/received_text"
+            android:text="sent"/>
+        <ImageView
+            android:id="@+id/senttext"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/received_text"
+            android:src="@drawable/ic_done"/>
+        <ImageView
+            android:id="@+id/readtext"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="18dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/received_text"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_done_all"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

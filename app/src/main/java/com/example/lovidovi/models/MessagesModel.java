@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class MessagesModel {
 
+
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -27,6 +28,9 @@ public class MessagesModel {
     @SerializedName("has_media")
     @Expose
     private Integer hasMedia;
+    @SerializedName("receiver_read")
+    @Expose
+    private Integer receiverRead;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -88,6 +92,14 @@ public class MessagesModel {
 
     public void setHasMedia(Integer hasMedia) {
         this.hasMedia = hasMedia;
+    }
+
+    public Integer getReceiverRead() {
+        return receiverRead;
+    }
+
+    public void setReceiverRead(Integer receiverRead) {
+        this.receiverRead = receiverRead;
     }
 
     public String getCreatedAt() {

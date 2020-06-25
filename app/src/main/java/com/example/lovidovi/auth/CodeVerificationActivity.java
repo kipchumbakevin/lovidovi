@@ -103,6 +103,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
                     startCountDownTimer();
                 }
                 else{
+                    startCountDownTimer();
                     Toast.makeText(CodeVerificationActivity.this,response.message(),Toast.LENGTH_LONG).show();
                 }
 
@@ -219,10 +220,8 @@ public class CodeVerificationActivity extends AppCompatActivity implements
 
     private void verification() {
         if (!reset){
-            Toast.makeText(context,"bad",Toast.LENGTH_SHORT).show();
             registerUserAfterConfirmation();
         }else{
-            Toast.makeText(context, "good", Toast.LENGTH_SHORT).show();
             changePassword();
         }
     }

@@ -2,6 +2,9 @@ package com.example.lovidovi.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText userName,pass;
     TextView forgotPass;
     Button login,signup;
+    private static final String RESET = "com.example.lovidovi.auth";
     private String clientsName,clientsUsername,clientsPhone,accessToken,clientsId;
     private SharedPreferencesConfig sharedPreferencesConfig;
     RelativeLayout progressLyt;
@@ -106,8 +110,11 @@ public class LoginActivity extends AppCompatActivity {
                     clientsPhone = response.body().getUser().getPhone();
                  //   clientsId = Integer.toString(response.body().getUser().getId());
                     sharedPreferencesConfig.saveAuthenticationInformation(accessToken,clientsName,clientsUsername,clientsPhone, Constants.ACTIVE_CONSTANT);
-                    Toast.makeText(LoginActivity.this,clientsName,Toast.LENGTH_LONG).show();
-                    welcome();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra(RESET, true);
+                    startActivity(intent);
+                    finish();
+
                 }
                 else{
                     Toast.makeText(LoginActivity.this,"Credentials do not match",Toast.LENGTH_LONG).show();

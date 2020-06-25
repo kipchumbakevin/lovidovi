@@ -1,5 +1,8 @@
 package com.example.lovidovi.ui;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,6 +14,13 @@ import com.example.lovidovi.models.UnreadNotificationsModel;
 import com.example.lovidovi.networking.RetrofitClient;
 import com.example.lovidovi.settings.SettingsActivity;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -37,7 +47,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     ImageView home,inboxImage,secretImage,notImg;
-    RelativeLayout inbox,secret,notification;
+    RelativeLayout inbox,secret,notification,progressLyt;
     FrameLayout frameLayout;
     NotificationsFragment notificationsFragment;
     TextView unreadInbox,unreadSecret,unreadNot;
@@ -46,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
     private Boolean reset = false;
     String gg = "nn";
     private static final String MESS ="com.example.lovidovi.ui";
-    int dd;
+    private static final String RESET = "com.example.lovidovi.auth";
+    int dd,check;
+   // private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         home = findViewById(R.id.home);
         inbox = findViewById(R.id.inbox);
+        progressLyt = findViewById(R.id.progressLoad);
         secret = findViewById(R.id.secret);
         notification = findViewById(R.id.notifications);
         inboxImage = findViewById(R.id.inboxImage);
@@ -68,9 +82,72 @@ public class MainActivity extends AppCompatActivity {
         unreadNotificationsModel = new UnreadNotificationsModel();
         sharedPreferencesConfig = new SharedPreferencesConfig(MainActivity.this);
         notificationsFragment = new NotificationsFragment();
+        if(getIntent().hasExtra(RESET)) {
+            reset = getIntent().getBooleanExtra(RESET, false);
+        }
+        if (!reset){
+            check = 0;
+        }else{
+            check = 1;
+        }
+        if (check==1){
+            Intent mStartActivity = new Intent(MainActivity.this,MainActivity.class);
+            int mPendingIntentId = 123456;
+            PendingIntent mPendingIntent = PendingIntent.getActivity(MainActivity.this,mPendingIntentId,mStartActivity,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC,System.currentTimeMillis()+50,mPendingIntent);
+            System.exit(0);
+        }
         if (getIntent().hasExtra(MESS)){
             reset = getIntent().getBooleanExtra(MESS, false);
         }
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//            }
+//        });
+//        mAdView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+//        mAdView.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                // Code to be executed when an ad finishes loading.
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(int errorCode) {
+//                // Code to be executed when an ad request fails.
+//            }
+//
+//            @Override
+//            public void onAdOpened() {
+//                // Code to be executed when an ad opens an overlay that
+//                // covers the screen.
+//            }
+//
+//            @Override
+//            public void onAdClicked() {
+//                // Code to be executed when the user clicks on an ad.
+//            }
+//
+//            @Override
+//            public void onAdLeftApplication() {
+//                // Code to be executed when the user has left the app.
+//            }
+//
+//            @Override
+//            public void onAdClosed() {
+//                // Code to be executed when the user is about to return
+//                // to the app after tapping on an ad.
+//            }
+//        });
+
         unreadNo();
         unreadIn();
         unreadSe();
@@ -174,13 +251,13 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else {
-                   // Toast.makeText(MainActivity.this,"Server error",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Server error",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<UnreadNotificationsModel> call, Throwable t) {
-                //Toast.makeText(MainActivity.this,"Network error"+t.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"Network error. Check your connection"+t.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -278,21 +355,30 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         if (id == R.id.action_logout){
-            logout();
+//            Intent intent = new Intent(MainActivity.this, SplashScreen.class);
+//            startActivity(intent);
+//            if (mInterstitialAd.isLoaded()) {
+//                mInterstitialAd.show();
+//            } else {
+//                Toast.makeText(MainActivity.this,"Not yet",Toast.LENGTH_LONG).show();
+//                Log.d("TAG", "The interstitial wasn't loaded yet.");
+//            }
+
+             logout();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void logout() {
-       // showProgress();
+        showProgress();
         Call<SignUpMessagesModel> call = RetrofitClient.getInstance(MainActivity.this)
                 .getApiConnector()
                 .logOut();
         call.enqueue(new Callback<SignUpMessagesModel>() {
             @Override
             public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
-              //  hideProgress();
+                hideProgress();
                 if (response.code() == 200) {
                     sharedPreferencesConfig.clear();
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -309,9 +395,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
-           //     hideProgress();
+                hideProgress();
                 Toast.makeText(MainActivity.this, "errot:" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void hideProgress() {
+        progressLyt.setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgress() {
+        progressLyt.setVisibility(View.VISIBLE);
     }
 }

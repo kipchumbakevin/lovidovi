@@ -29,5 +29,6 @@
         android:layout_height="wrap_content"/>
     <include layout="@layout/floatingaction"/>
     <include layout="@layout/content_progress_bar"/>
+    <include layout="@layout/no_notifications"/>
 
 </FrameLayout>

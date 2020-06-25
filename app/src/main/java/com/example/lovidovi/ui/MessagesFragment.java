@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +50,7 @@ public class MessagesFragment extends Fragment {
     private final int REQUEST_CODE=99;
     RelativeLayout progressLyt;
     EditText pp;
+    ConstraintLayout no_messages;
 
 
     public MessagesFragment() {
@@ -63,6 +65,7 @@ public class MessagesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
         recyclerView = view.findViewById(R.id.messagesrecycler);
         progressLyt = view.findViewById(R.id.progressLoad);
+        no_messages = view.findViewById(R.id.nomessages);
         chatsAdapter = new ChatsAdapter(getActivity(),mMessagesArrayList);
         recyclerView.setAdapter(chatsAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
@@ -195,8 +198,13 @@ public class MessagesFragment extends Fragment {
                     public void onResponse(Call<List<ChatsModel>> call, Response<List<ChatsModel>> response) {
                         hideProgress();
                         if (response.isSuccessful()) {
-                            mMessagesArrayList.addAll(response.body());
-                            chatsAdapter.notifyDataSetChanged();
+                            if (response.body().size()>0){
+                                mMessagesArrayList.addAll(response.body());
+                                chatsAdapter.notifyDataSetChanged();
+                            }else {
+                                no_messages.setVisibility(View.VISIBLE);
+                            }
+
                         } else {
                            // Toast.makeText(getActivity(), "Server error " + response.message(), Toast.LENGTH_SHORT).show();
                         }

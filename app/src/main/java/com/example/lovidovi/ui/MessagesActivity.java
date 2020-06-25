@@ -141,6 +141,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void viewSecret() {
         mMessagesArrayList.clear();
+        showProgress();
         Call<List<MessagesModel>> call = RetrofitClient.getInstance(MessagesActivity.this)
                 .getApiConnector()
                 .getsecretM(chat_id);

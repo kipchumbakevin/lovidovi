@@ -200,5 +200,12 @@ public interface JsonPlaceHolderInterface {
 
     @GET("api/auth/logout")
     Call<SignUpMessagesModel> logOut();
+
+    //delete quote
+    @FormUrlEncoded
+    @POST("api/deletequote")
+    Call<SignUpMessagesModel> deleteQuote(
+            @Field("id")String id
+    );
 }
 

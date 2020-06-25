@@ -46,7 +46,7 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
     public void onBindViewHolder(@NonNull SecretChatsAdapter.SecretViewHolder holder, int position) {
         SharedPreferencesConfig sharedPreferencesConfig = new SharedPreferencesConfig(mContext);
         ChatsModel chatsModel = mSecretArrayList.get(position);
-        Toast.makeText(mContext, sharedPreferencesConfig.readClientsName() + " "+chatsModel.getReceiver().getReceiverId(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(mContext, sharedPreferencesConfig.readClientsName() + " "+chatsModel.getReceiver().getReceiverId(), Toast.LENGTH_SHORT).show();
         if (chatsModel.getReceiver().getReceiverId().equals(sharedPreferencesConfig.readClientsName()) && chatsModel.getReceiver().getReceiverRead()== 0){
             holder.unread.setVisibility(View.VISIBLE);
         }

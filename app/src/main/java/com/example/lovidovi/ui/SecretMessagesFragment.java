@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +50,7 @@ public class SecretMessagesFragment extends Fragment {
     SharedPreferencesConfig sharedPreferencesConfig;
     EditText pp;
     RelativeLayout progressLyt;
+    ConstraintLayout no_messages;
     private final int REQUEST_CODE=99;
     public SecretMessagesFragment() {
         // Required empty public constructor
@@ -62,6 +64,7 @@ public class SecretMessagesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_secret_messages, container, false);
         recyclerView = view.findViewById(R.id.secretrecycler);
         progressLyt = view.findViewById(R.id.progressLoad);
+        no_messages = view.findViewById(R.id.nomessages);
         secretChatsAdapter = new SecretChatsAdapter(getActivity(),mSecretArrayList);
         recyclerView.setAdapter(secretChatsAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
@@ -196,8 +199,12 @@ public class SecretMessagesFragment extends Fragment {
             public void onResponse(Call<List<ChatsModel>> call, Response<List<ChatsModel>> response) {
                 hideProgress();
                 if (response.isSuccessful()) {
-                    mSecretArrayList.addAll(response.body());
-                    secretChatsAdapter.notifyDataSetChanged();
+                    if (response.body().size()>0){
+                        mSecretArrayList.addAll(response.body());
+                        secretChatsAdapter.notifyDataSetChanged();
+                    }else {
+                        no_messages.setVisibility(View.VISIBLE);
+                    }
                 } else {
                   //  Toast.makeText(getActivity(), "Server error " + response.message(), Toast.LENGTH_SHORT).show();
                 }
