@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class MessagesModel {
 
-
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -31,6 +30,12 @@ public class MessagesModel {
     @SerializedName("receiver_read")
     @Expose
     private Integer receiverRead;
+    @SerializedName("sender_delete")
+    @Expose
+    private Integer senderDelete;
+    @SerializedName("receiver_delete")
+    @Expose
+    private Integer receiverDelete;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -102,6 +107,22 @@ public class MessagesModel {
         this.receiverRead = receiverRead;
     }
 
+    public Integer getSenderDelete() {
+        return senderDelete;
+    }
+
+    public void setSenderDelete(Integer senderDelete) {
+        this.senderDelete = senderDelete;
+    }
+
+    public Integer getReceiverDelete() {
+        return receiverDelete;
+    }
+
+    public void setReceiverDelete(Integer receiverDelete) {
+        this.receiverDelete = receiverDelete;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -117,5 +138,4 @@ public class MessagesModel {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 }

@@ -95,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
             int mPendingIntentId = 123456;
             PendingIntent mPendingIntent = PendingIntent.getActivity(MainActivity.this,mPendingIntentId,mStartActivity,
                     PendingIntent.FLAG_CANCEL_CURRENT);
+            finish();
             AlarmManager mgr = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC,System.currentTimeMillis()+50,mPendingIntent);
+            mgr.set(AlarmManager.RTC,System.currentTimeMillis()+100,mPendingIntent);
             System.exit(0);
         }
         if (getIntent().hasExtra(MESS)){

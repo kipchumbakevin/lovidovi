@@ -1,13 +1,21 @@
 package com.example.lovidovi.ui;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -38,8 +46,10 @@ public class MessagesActivity extends AppCompatActivity {
     private static final String KNOW = "com.example.lovidovi.adapters";
     ImageView send;
     EditText typeamessage;
+    private final int REQUEST_CODE=99;
     RelativeLayout progressLyt;
     private static final String MESS ="com.example.lovidovi.ui";
+    public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private Boolean reset = false;
 
     @Override
@@ -286,4 +296,5 @@ public class MessagesActivity extends AppCompatActivity {
     private void showProgress() {
         progressLyt.setVisibility(View.VISIBLE);
     }
+
 }

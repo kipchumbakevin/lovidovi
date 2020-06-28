@@ -1,14 +1,20 @@
 package com.example.lovidovi.ui;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +57,7 @@ public class MessagesFragment extends Fragment {
     RelativeLayout progressLyt;
     EditText pp;
     ConstraintLayout no_messages;
+    public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
 
     public MessagesFragment() {
@@ -112,8 +119,7 @@ public class MessagesFragment extends Fragment {
         contacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, REQUEST_CODE);
+                requestContactPermission();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -224,5 +230,56 @@ public class MessagesFragment extends Fragment {
 
     private void showProgress() {
         progressLyt.setVisibility(View.VISIBLE);
+    }
+    public void requestContactPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        android.Manifest.permission.READ_CONTACTS)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Read Contacts permission");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setMessage("Please enable access to contacts.");
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(
+                                    new String[]
+                                            {android.Manifest.permission.READ_CONTACTS}
+                                    , PERMISSIONS_REQUEST_READ_CONTACTS);
+                        }
+                    });
+                    builder.show();
+                } else {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{android.Manifest.permission.READ_CONTACTS},
+                            PERMISSIONS_REQUEST_READ_CONTACTS);
+                }
+            } else {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        } else {
+            Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            startActivityForResult(intent, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_READ_CONTACTS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(intent, REQUEST_CODE);
+                } else {
+                    Toast.makeText(getActivity(), "You have disabled a contacts permission", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
     }
 }

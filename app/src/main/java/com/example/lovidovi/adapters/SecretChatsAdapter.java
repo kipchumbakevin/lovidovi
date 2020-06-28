@@ -1,6 +1,8 @@
 package com.example.lovidovi.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lovidovi.R;
 import com.example.lovidovi.models.ChatsModel;
 import com.example.lovidovi.models.SignUpMessagesModel;
 import com.example.lovidovi.networking.RetrofitClient;
+import com.example.lovidovi.ui.MainActivity;
 import com.example.lovidovi.ui.MessagesActivity;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
 
@@ -101,6 +105,52 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
                     //   ((Activity) mContext).finish();
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("Delete")
+                            .setMessage("Delete this chat?")
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Call<SignUpMessagesModel> call = RetrofitClient.getInstance(mContext)
+                                            .getApiConnector()
+                                            .deleteSecretChat(id);
+                                    call.enqueue(new Callback<SignUpMessagesModel>() {
+                                        @Override
+                                        public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                                            if (response.code() == 201) {
+                                                Intent intent = new Intent(mContext, MainActivity.class);
+                                                mContext.startActivity(intent);
+                                                ((Activity) mContext).finish();
+                                                Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Toast.makeText(mContext, "Server error", Toast.LENGTH_LONG).show();
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                                            Toast.makeText(mContext, t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    return false;
+                }
+            });
         }
+
     }
 }

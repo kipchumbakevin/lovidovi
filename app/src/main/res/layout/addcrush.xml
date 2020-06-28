@@ -176,7 +176,10 @@
             android:layout_height="50dp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-    <include layout="@layout/content_progress_bar"/>
+    <include layout="@layout/content_progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

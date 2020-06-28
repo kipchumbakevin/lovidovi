@@ -137,8 +137,22 @@ public interface JsonPlaceHolderInterface {
     );
     @GET("api/fetchunreadsecret")
     Call<UnreadNotificationsModel> unreadS();
+
+    //delete secret chat
+    @FormUrlEncoded
+    @POST("api/deletesecretchat")
+    Call<SignUpMessagesModel> deleteSecretChat(
+            @Field("id")String id
+    );
     @GET("api/fetchsecretchats")
     Call<List<ChatsModel>> getsecretChats();
+
+    //delete chat
+    @FormUrlEncoded
+    @POST("api/deletechat")
+    Call<SignUpMessagesModel> deleteChat(
+            @Field("id")String id
+    );
     //read all notifications
     @FormUrlEncoded
     @POST("api/readnotifications")

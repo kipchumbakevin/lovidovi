@@ -20,12 +20,12 @@ public class ChatsModel {
     @SerializedName("group")
     @Expose
     private Integer group;
-    @SerializedName("owner_r")
+    @SerializedName("owner_delete")
     @Expose
-    private Integer ownerR;
-    @SerializedName("participant_r")
+    private Integer ownerDelete;
+    @SerializedName("participant_delete")
     @Expose
-    private Integer participantR;
+    private Integer participantDelete;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -34,7 +34,7 @@ public class ChatsModel {
     private String updatedAt;
     @SerializedName("participant")
     @Expose
-    private Participant participant;
+    private Object participant;
     @SerializedName("owner")
     @Expose
     private Owner owner;
@@ -74,20 +74,20 @@ public class ChatsModel {
         this.group = group;
     }
 
-    public Integer getOwnerR() {
-        return ownerR;
+    public Integer getOwnerDelete() {
+        return ownerDelete;
     }
 
-    public void setOwnerR(Integer ownerR) {
-        this.ownerR = ownerR;
+    public void setOwnerDelete(Integer ownerDelete) {
+        this.ownerDelete = ownerDelete;
     }
 
-    public Integer getParticipantR() {
-        return participantR;
+    public Integer getParticipantDelete() {
+        return participantDelete;
     }
 
-    public void setParticipantR(Integer participantR) {
-        this.participantR = participantR;
+    public void setParticipantDelete(Integer participantDelete) {
+        this.participantDelete = participantDelete;
     }
 
     public String getCreatedAt() {
@@ -106,11 +106,11 @@ public class ChatsModel {
         this.updatedAt = updatedAt;
     }
 
-    public Participant getParticipant() {
+    public Object getParticipant() {
         return participant;
     }
 
-    public void setParticipant(Participant participant) {
+    public void setParticipant(Object participant) {
         this.participant = participant;
     }
 
@@ -129,4 +129,5 @@ public class ChatsModel {
     public void setReceiver(Receiver receiver) {
         this.receiver = receiver;
     }
+
 }
