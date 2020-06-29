@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lovidovi.R;
+import com.example.lovidovi.adapters.MyQuotesAdapter;
 import com.example.lovidovi.adapters.QuotesAdapter;
 import com.example.lovidovi.models.QuotesModel;
 import com.example.lovidovi.models.SignUpMessagesModel;
@@ -45,10 +47,12 @@ import retrofit2.Response;
  */
 public class HomeFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,recycler2;
     RelativeLayout progressLyt;
     private ArrayList<QuotesModel>mQuotesArrayList = new ArrayList<>();
+    private ArrayList<QuotesModel>mMyQuotesArrayList = new ArrayList<>();
     QuotesAdapter quotesAdapter;
+    MyQuotesAdapter mm;
     FloatingActionButton floatingActionButton;
     private AdView mAdView;
 
@@ -64,8 +68,14 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = view.findViewById(R.id.quaotesrecyclerview);
+        recycler2 = view.findViewById(R.id.myquotes);
+        LinearLayoutManager linearLayoutManager =
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recycler2.setLayoutManager(linearLayoutManager);
         quotesAdapter = new QuotesAdapter(getActivity(),mQuotesArrayList);
+        mm = new MyQuotesAdapter(getActivity(),mMyQuotesArrayList);
         recyclerView.setAdapter(quotesAdapter);
+        recycler2.setAdapter(mm);
         progressLyt = view.findViewById(R.id.progressLoad);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getResources().getInteger(R.integer.product_grid_span)));
         floatingActionButton = view.findViewById(R.id.fab);
@@ -78,6 +88,7 @@ public class HomeFragment extends Fragment {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         viewQuotes();
+        viewMyQuotes();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,6 +234,33 @@ public class HomeFragment extends Fragment {
             public void onFailure(Call<List<QuotesModel>> call, Throwable t) {
                 hideProgress();
               //  Toast.makeText(getActivity(),"Network error",Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+    private void viewMyQuotes() {
+        showProgress();
+        mMyQuotesArrayList.clear();
+        Call<List<QuotesModel>> call = RetrofitClient.getInstance(getActivity())
+                .getApiConnector()
+                .getMyQuotes();
+        call.enqueue(new Callback<List<QuotesModel>>() {
+            @Override
+            public void onResponse(Call<List<QuotesModel>> call, Response<List<QuotesModel>> response) {
+                hideProgress();
+                if (response.isSuccessful()) {
+                    mMyQuotesArrayList.addAll(response.body());
+                    mm.notifyDataSetChanged();
+                }
+                else {
+                    // Toast.makeText(getActivity(),"Server error",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<QuotesModel>> call, Throwable t) {
+                hideProgress();
+                //  Toast.makeText(getActivity(),"Network error",Toast.LENGTH_SHORT).show();
             }
 
         });

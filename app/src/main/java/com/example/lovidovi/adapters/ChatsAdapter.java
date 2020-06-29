@@ -52,6 +52,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
     public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
         SharedPreferencesConfig sharedPreferencesConfig = new SharedPreferencesConfig(mContext);
         ChatsModel chatsModel = mMessagesArrayList.get(position);
+        holder.r = Integer.toString(chatsModel.getOwnerDelete());
         if (chatsModel.getReceiver()!=null && chatsModel.getReceiver().getReceiverId().equals(sharedPreferencesConfig.readClientsName()) && chatsModel.getReceiver().getReceiverRead()==0){
             holder.unread.setVisibility(View.VISIBLE);
         }
@@ -85,7 +86,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
 
     public class MessagesViewHolder extends RecyclerView.ViewHolder {
         int mcurrentposition;
-        String id,tt,pp,ss;
+        String id,tt,pp,ss,r;
         TextView username,sample;
         ImageView unread;
         public MessagesViewHolder(@NonNull View itemView) {
@@ -103,6 +104,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
                     intent.putExtra("USERNAME",username.getText().toString());
                     intent.putExtra(KNOW,true);
                     intent.putExtra("PHONE",pp);
+                    intent.putExtra("DEL",r);
                     mContext.startActivity(intent);
                  //   ((Activity) mContext).finish();
                 }

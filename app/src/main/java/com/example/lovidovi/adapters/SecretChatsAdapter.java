@@ -50,8 +50,9 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
     public void onBindViewHolder(@NonNull SecretChatsAdapter.SecretViewHolder holder, int position) {
         SharedPreferencesConfig sharedPreferencesConfig = new SharedPreferencesConfig(mContext);
         ChatsModel chatsModel = mSecretArrayList.get(position);
+        holder.r = Integer.toString(chatsModel.getOwnerDelete());
        // Toast.makeText(mContext, sharedPreferencesConfig.readClientsName() + " "+chatsModel.getReceiver().getReceiverId(), Toast.LENGTH_SHORT).show();
-        if (chatsModel.getReceiver().getReceiverId().equals(sharedPreferencesConfig.readClientsName()) && chatsModel.getReceiver().getReceiverRead()== 0){
+        if (chatsModel.getReceiver()!=null && chatsModel.getReceiver().getReceiverId().equals(sharedPreferencesConfig.readClientsName()) && chatsModel.getReceiver().getReceiverRead()== 0){
             holder.unread.setVisibility(View.VISIBLE);
         }
         if (chatsModel.getParticipant()== null && !chatsModel.getParticipantId().equals(sharedPreferencesConfig.readClientsName())){
@@ -84,7 +85,7 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
 
     public class SecretViewHolder extends RecyclerView.ViewHolder {
         int mcurrentposition;
-        String id;
+        String id,r;
         TextView username,sample;
         String pp;
         ImageView unread;
@@ -101,6 +102,7 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
                     intent.putExtra("CHATID",id);
                     intent.putExtra("SIMU",pp);
                     intent.putExtra("USERNAME",username.getText().toString());
+                    intent.putExtra("DEL",r);
                     mContext.startActivity(intent);
                     //   ((Activity) mContext).finish();
                 }

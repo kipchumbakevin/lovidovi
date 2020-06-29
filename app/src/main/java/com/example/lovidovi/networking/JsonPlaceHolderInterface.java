@@ -108,6 +108,8 @@ public interface JsonPlaceHolderInterface {
     //getallquotes
     @GET("api/fetchquote")
     Call<List<QuotesModel>> getQuotes();
+    @GET("api/fetchmyquote")
+    Call<List<QuotesModel>> getMyQuotes();
 
     //add a quote
 

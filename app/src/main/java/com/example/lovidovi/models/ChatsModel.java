@@ -23,9 +23,6 @@ public class ChatsModel {
     @SerializedName("owner_delete")
     @Expose
     private Integer ownerDelete;
-    @SerializedName("participant_delete")
-    @Expose
-    private Integer participantDelete;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -34,7 +31,7 @@ public class ChatsModel {
     private String updatedAt;
     @SerializedName("participant")
     @Expose
-    private Object participant;
+    private Participant participant;
     @SerializedName("owner")
     @Expose
     private Owner owner;
@@ -82,14 +79,6 @@ public class ChatsModel {
         this.ownerDelete = ownerDelete;
     }
 
-    public Integer getParticipantDelete() {
-        return participantDelete;
-    }
-
-    public void setParticipantDelete(Integer participantDelete) {
-        this.participantDelete = participantDelete;
-    }
-
     public String getCreatedAt() {
         return createdAt;
     }
@@ -106,11 +95,11 @@ public class ChatsModel {
         this.updatedAt = updatedAt;
     }
 
-    public Object getParticipant() {
+    public Participant getParticipant() {
         return participant;
     }
 
-    public void setParticipant(Object participant) {
+    public void setParticipant(Participant participant) {
         this.participant = participant;
     }
 
@@ -129,5 +118,4 @@ public class ChatsModel {
     public void setReceiver(Receiver receiver) {
         this.receiver = receiver;
     }
-
 }

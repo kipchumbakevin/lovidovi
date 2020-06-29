@@ -42,7 +42,7 @@ public class MessagesActivity extends AppCompatActivity {
     private ArrayList<MessagesModel>mMessagesArrayList = new ArrayList<>();
     MessagesAdapter messagesAdapter;
     RecyclerView recyclerView;
-    String chat_id,title,phone,simu;
+    String chat_id,title,phone,simu,r;
     private static final String KNOW = "com.example.lovidovi.adapters";
     ImageView send;
     EditText typeamessage;
@@ -66,8 +66,12 @@ public class MessagesActivity extends AppCompatActivity {
         title = getIntent().getExtras().getString("USERNAME");
         phone = getIntent().getExtras().getString("PHONE");
         simu = getIntent().getExtras().getString("SIMU");
+        r = getIntent().getExtras().getString("DEL");
         if(getIntent().hasExtra(KNOW)) {
             reset = getIntent().getBooleanExtra(KNOW, false);
+        }
+        if (r.equals(Integer.toString(1))){
+            Toast.makeText(MessagesActivity.this,"Messages in this chat have been deleted.",Toast.LENGTH_SHORT).show();
         }
         ActionBar actionBar = getSupportActionBar();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
