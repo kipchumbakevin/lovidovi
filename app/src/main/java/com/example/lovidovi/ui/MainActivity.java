@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean reset = false;
     String gg = "nn";
     private static final String MESS ="com.example.lovidovi.ui";
-    private static final String RESET = "com.example.lovidovi.auth";
+    private static final String RESETT = "com.example.lovidovi.auth";
     int dd,check;
    // private AdView mAdView;
     private InterstitialAd mInterstitialAd;
@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         unreadNotificationsModel = new UnreadNotificationsModel();
         sharedPreferencesConfig = new SharedPreferencesConfig(MainActivity.this);
         notificationsFragment = new NotificationsFragment();
-        if(getIntent().hasExtra(RESET)) {
-            reset = getIntent().getBooleanExtra(RESET, false);
+        if(getIntent().hasExtra(RESETT)) {
+            reset = getIntent().getBooleanExtra(RESETT, false);
         }
         if (!reset){
             check = 0;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     PendingIntent.FLAG_CANCEL_CURRENT);
             finish();
             AlarmManager mgr = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC,System.currentTimeMillis()+30,mPendingIntent);
+            mgr.set(AlarmManager.RTC,System.currentTimeMillis()+20,mPendingIntent);
             System.exit(0);
         }
         if (getIntent().hasExtra(MESS)){

@@ -113,7 +113,7 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("Delete")
-                            .setMessage("Delete this chat?")
+                            .setMessage("Delete messages in this chat?")
                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {

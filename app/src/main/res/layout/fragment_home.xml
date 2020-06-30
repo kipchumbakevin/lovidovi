@@ -31,6 +31,13 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorTab"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,7 +68,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="73dp"/>
-
+    </androidx.appcompat.widget.LinearLayoutCompat>
+        </ScrollView>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <include layout="@layout/floatingaction"/>
     <include layout="@layout/content_progress_bar"/>

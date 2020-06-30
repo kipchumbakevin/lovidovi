@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText userName,pass;
     TextView forgotPass;
     Button login,signup;
-    private static final String RESET = "com.example.lovidovi.auth";
+    private static final String RESETT = "com.example.lovidovi.auth";
     private String clientsName,clientsUsername,clientsPhone,accessToken,clientsId;
     private SharedPreferencesConfig sharedPreferencesConfig;
     RelativeLayout progressLyt;
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                  //   clientsId = Integer.toString(response.body().getUser().getId());
                     sharedPreferencesConfig.saveAuthenticationInformation(accessToken,clientsName,clientsUsername,clientsPhone, Constants.ACTIVE_CONSTANT);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra(RESET, true);
+                    intent.putExtra(RESETT, true);
                     startActivity(intent);
                     finish();
 

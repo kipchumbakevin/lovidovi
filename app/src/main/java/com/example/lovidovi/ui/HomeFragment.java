@@ -144,26 +144,6 @@ public class HomeFragment extends Fragment {
         alertDialogBuilder.setView(view);
         final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-        enterquote.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                done.setEnabled(false);
-                done.setTextColor(getResources().getColor(R.color.colorGray));
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()!=0){
-                    done.setEnabled(true);
-                    done.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         enterquote.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -180,33 +160,40 @@ public class HomeFragment extends Fragment {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String quote = enterquote.getText().toString();
-                showProgress();
-                Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
-                        .getApiConnector()
-                        .addQuote(quote);
-                call.enqueue(new Callback<SignUpMessagesModel>() {
-                    @Override
-                    public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
-                        hideProgress();
-                        if (response.code() == 201) {
-                            Intent intent = new Intent(getActivity(),MainActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
-                            alertDialog.dismiss();
-                            Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                if (enterquote.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(),"You cant add an empty quote",Toast.LENGTH_SHORT).show();
+                }if (enterquote.getText().length()<10){
+                    Toast.makeText(getActivity(),"Too short",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String quote = enterquote.getText().toString();
+                    showProgress();
+                    Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
+                            .getApiConnector()
+                            .addQuote(quote);
+                    call.enqueue(new Callback<SignUpMessagesModel>() {
+                        @Override
+                        public void onResponse(Call<SignUpMessagesModel> call, Response<SignUpMessagesModel> response) {
+                            hideProgress();
+                            if (response.code() == 201) {
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                                alertDialog.dismiss();
+                                Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
                         }
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
-                        hideProgress();
-                        Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
+                            hideProgress();
+                            Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
     }

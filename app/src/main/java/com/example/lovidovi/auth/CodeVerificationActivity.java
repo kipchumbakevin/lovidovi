@@ -53,7 +53,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
     private Context context;
     private SharedPreferencesConfig sharedPreferencesConfig;
     private static final String RESET ="com.example.lovidovi.settings" ;
-
+    private static final String RESETT ="com.example.lovidovi.auth" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,29 +90,28 @@ public class CodeVerificationActivity extends AppCompatActivity implements
         sendCode();
     }
     private void sendCode() {
-       // showProgress();
+        showProgress();
         Call<SendCodeModel> call = RetrofitClient.getInstance(CodeVerificationActivity.this)
                 .getApiConnector()
                 .code(phone,appSignature);
         call.enqueue(new Callback<SendCodeModel>() {
             @Override
             public void onResponse(Call<SendCodeModel> call, Response<SendCodeModel> response) {
-              //  hideProgress();
+                hideProgress();
                 if(response.code()==201){
                     startSMSListener();
                     startCountDownTimer();
                 }
                 else{
-                    startCountDownTimer();
-                    Toast.makeText(CodeVerificationActivity.this,response.message(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(CodeVerificationActivity.this,"Server error",Toast.LENGTH_LONG).show();
                 }
 
             }
 
             @Override
             public void onFailure(Call<SendCodeModel> call, Throwable t) {
-              //  hideProgress();
-                Toast.makeText(CodeVerificationActivity.this,t.getMessage()+"error",Toast.LENGTH_LONG).show();
+                hideProgress();
+                Toast.makeText(CodeVerificationActivity.this,t.getMessage()+"Network error. Check your connection",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -136,6 +135,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
                     sharedPreferencesConfig.saveAuthenticationInformation(token,clientsName,clientsUsername,clientsPhone, Constants.ACTIVE_CONSTANT);
                     Toast.makeText(CodeVerificationActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CodeVerificationActivity.this, MainActivity.class);
+                    intent.putExtra(RESETT, true);
                     startActivity(intent);
                     finish();
                 }

@@ -94,32 +94,17 @@ public class MessagesActivity extends AppCompatActivity {
         }else{
             viewSecret();
         }
-        typeamessage.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                send.setEnabled(false);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()!=0){
-                    send.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (reset){
-                    sendDeMessage();
-                }else{
-                    sendDeSecretMessage();
+                if (!typeamessage.getText().toString().isEmpty()){
+                    if (reset){
+                        sendDeMessage();
+                    }else{
+                        sendDeSecretMessage();
+                    }
                 }
+
             }
         });
     }

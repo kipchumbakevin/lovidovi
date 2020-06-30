@@ -74,26 +74,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public class NotificationsViewHolders extends RecyclerView.ViewHolder {
         TextView notification,sendText;
         String phone;
-        ImageView delete;
         int item_id;
         ConstraintLayout constraintLayout;
         public NotificationsViewHolders(@NonNull View itemView) {
             super(itemView);
             notification = itemView.findViewById(R.id.notify);
             sendText = itemView.findViewById(R.id.sendText);
-            delete = itemView.findViewById(R.id.delete);
             constraintLayout = itemView.findViewById(R.id.constr);
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    delete.setVisibility(View.VISIBLE);
-                    constraintLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrayy));
-                    return false;
-                }
-            });
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("Delete")
                             .setMessage("Are you sure you want to delete?")
@@ -133,7 +123,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                             });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-
+                    return false;
                 }
             });
 

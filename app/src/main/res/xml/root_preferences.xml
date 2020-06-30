@@ -23,13 +23,13 @@
         <Preference
             app:key="personal_information"
             app:title="Personal Information"
-            app:summary="Change your Username, First,Last Name and Location"
+            app:summary="Change your Username"
             app:icon="@drawable/ic_account_circle" />
 
         <Preference
             app:key="security_information"
             app:title="Security Information"
-            app:summary="Change your Password,Phone number"
+            app:summary="Change your Password"
             app:icon="@drawable/ic_lock_outline"/>
 
 

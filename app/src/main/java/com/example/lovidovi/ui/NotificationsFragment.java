@@ -137,7 +137,10 @@ public class NotificationsFragment extends Fragment {
             public void onClick(View view) {
                 if (enterNum.getText().toString().isEmpty()){
                     enterNum.setError("Required");
-                }else {
+                }if (enterNum.getText().length()<10 || enterNum.getText().length()>13){
+                    Toast.makeText(getActivity(),"Enter valid number",Toast.LENGTH_SHORT).show();
+                }
+                else {
                     String phone = enterNum.getText().toString();
                     showProgress();
                     Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
@@ -184,7 +187,6 @@ public class NotificationsFragment extends Fragment {
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
                 } else {
-                    Toast.makeText(getActivity(),"Not yet",Toast.LENGTH_LONG).show();
                     Log.d("TAG", "The interstitial wasn't loaded yet.");
                 }
             }

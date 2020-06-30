@@ -37,6 +37,8 @@ import com.example.lovidovi.models.ChatsModel;
 import com.example.lovidovi.models.SignUpMessagesModel;
 import com.example.lovidovi.networking.RetrofitClient;
 import com.example.lovidovi.utils.SharedPreferencesConfig;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public class SecretMessagesFragment extends Fragment {
     RelativeLayout progressLyt;
     ConstraintLayout no_messages;
     private final int REQUEST_CODE=99;
+    private InterstitialAd mInterstitialAd;
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     public SecretMessagesFragment() {
         // Required empty public constructor
@@ -76,6 +79,9 @@ public class SecretMessagesFragment extends Fragment {
         recyclerView.setAdapter(secretChatsAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         sharedPreferencesConfig = new SharedPreferencesConfig(getActivity());
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
         FloatingActionButton floatingActionButton = view.findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +131,11 @@ public class SecretMessagesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                }
             }
         });
         send.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +146,10 @@ public class SecretMessagesFragment extends Fragment {
                 }
                 if (pp.getText().toString().isEmpty()) {
                     pp.setError("Required");
-                } else {
+                }
+                if (pp.getText().length()<10 || pp.getText().length()>13){
+                    Toast.makeText(getActivity(),"Enter valid number",Toast.LENGTH_SHORT).show();
+                }else {
                     String phone = pp.getText().toString();
                     String mess = message.getText().toString();
                     showProgress();
