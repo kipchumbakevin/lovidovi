@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import com.example.lovidovi.networking.RetrofitClient;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -55,6 +57,7 @@ public class HomeFragment extends Fragment {
     MyQuotesAdapter mm;
     FloatingActionButton floatingActionButton;
     private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
 
 
     public HomeFragment() {
@@ -79,6 +82,9 @@ public class HomeFragment extends Fragment {
         progressLyt = view.findViewById(R.id.progressLoad);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getResources().getInteger(R.integer.product_grid_span)));
         floatingActionButton = view.findViewById(R.id.fab);
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
         MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -155,6 +161,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                }
             }
         });
         done.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +201,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
                             hideProgress();
-                            Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Network error. Check your connection.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }

@@ -241,7 +241,7 @@ public class NotificationsFragment extends Fragment {
 
                 }
                 else{
-                   // Toast.makeText(getActivity(),"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -250,7 +250,7 @@ public class NotificationsFragment extends Fragment {
             public void onFailure(Call<List<ReceiveNotificationsModel>> call, Throwable t) {
 
                 hideProgress();
-               // Toast.makeText(getContext(),"Network error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Network error",Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -82,7 +82,7 @@ public class ConfirmPhoneChangeCode extends AppCompatActivity implements
             @Override
             public void onFailure(Call<GenerateCodeModel> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(ConfirmPhoneChangeCode.this,"Network error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmPhoneChangeCode.this,"Network error. Check your connection.",Toast.LENGTH_SHORT).show();
             }
         });
     }

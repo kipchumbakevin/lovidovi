@@ -86,7 +86,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ForgotPasswordModel> call, Throwable t) {
                     hideProgress();
-                    Toast.makeText(ForgotPasswordActivity.this, "errot:" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordActivity.this, "Network error. Check your connection.", Toast.LENGTH_SHORT).show();
                 }
             });
         }

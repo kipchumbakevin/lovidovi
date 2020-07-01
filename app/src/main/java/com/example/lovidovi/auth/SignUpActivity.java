@@ -82,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
                         finish();
                         Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUpActivity.this, "Server error", Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -90,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
                     hideProgress();
-                    Toast.makeText(SignUpActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, "Network error. Check your connection.", Toast.LENGTH_LONG).show();
                 }
             });
         }

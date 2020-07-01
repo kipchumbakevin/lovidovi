@@ -111,7 +111,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
             @Override
             public void onFailure(Call<SendCodeModel> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(CodeVerificationActivity.this,t.getMessage()+"Network error. Check your connection",Toast.LENGTH_LONG).show();
+                Toast.makeText(CodeVerificationActivity.this,"Network error. Check your connection",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -140,7 +140,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
                     finish();
                 }
                 else{
-                    Toast.makeText(CodeVerificationActivity.this,"response:"+response.message(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CodeVerificationActivity.this,"Sever error",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -148,7 +148,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
             @Override
             public void onFailure(Call<UsersModel> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(CodeVerificationActivity.this,"errot:"+t.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(CodeVerificationActivity.this,"Network error. Check your connection",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -275,7 +275,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
                     finish();
                 }
                 else{
-                    Toast.makeText(CodeVerificationActivity.this,"response:"+response.message(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CodeVerificationActivity.this,"Server error",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -283,7 +283,7 @@ public class CodeVerificationActivity extends AppCompatActivity implements
             @Override
             public void onFailure(Call<ChangedForgotPassModel> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(CodeVerificationActivity.this,"errot:"+t.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(CodeVerificationActivity.this,"Network error. Check your connection"+t.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -33,6 +33,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
     private static final String KNOW = "com.example.lovidovi.adapters";
     private final Context mContext;
     private final boolean mmm = false;
+    private static final String SECRET = "com.example.lovidovi.adapters";
+    String secret = Integer.toString(1);
     private final ArrayList<ChatsModel> mMessagesArrayList;
     private final LayoutInflater mLayoutInflator;
 
@@ -105,6 +107,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.MessagesView
                     intent.putExtra(KNOW,true);
                     intent.putExtra("PHONE",pp);
                     intent.putExtra("DEL",r);
+                    intent.putExtra("SECRET",secret);
                     mContext.startActivity(intent);
                  //   ((Activity) mContext).finish();
                 }

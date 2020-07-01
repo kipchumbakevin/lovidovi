@@ -96,7 +96,7 @@ public class ChangePersonalInfo extends AppCompatActivity {
                                 @Override
                                 public void onFailure(Call<ChangeDetailsModel> call, Throwable t) {
                                     hideProgress();
-                                    Toast.makeText(ChangePersonalInfo.this,"errot:"+t.getMessage(),Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ChangePersonalInfo.this, "Network error. Check your connection.", Toast.LENGTH_LONG).show();
                                 }
                             });
                         }

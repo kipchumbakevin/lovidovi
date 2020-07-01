@@ -2,8 +2,10 @@ package com.example.lovidovi.ui;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.lovidovi.R;
@@ -97,12 +99,13 @@ public class MainActivity extends AppCompatActivity {
                     PendingIntent.FLAG_CANCEL_CURRENT);
             finish();
             AlarmManager mgr = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC,System.currentTimeMillis()+20,mPendingIntent);
+            mgr.set(AlarmManager.RTC,System.currentTimeMillis()+5,mPendingIntent);
             System.exit(0);
         }
         if (getIntent().hasExtra(MESS)){
             reset = getIntent().getBooleanExtra(MESS, false);
         }
+
 //        MobileAds.initialize(this, new OnInitializationCompleteListener() {
 //            @Override
 //            public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -354,6 +357,21 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
+        }
+        if (id == R.id.action_rate){
+            Uri uri = Uri.parse("market://details?id=" + MainActivity.this.getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + MainActivity.this.getPackageName())));
+            }
         }
         if (id == R.id.action_logout){
 //            Intent intent = new Intent(MainActivity.this, SplashScreen.class);

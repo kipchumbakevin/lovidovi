@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UsersModel> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(LoginActivity.this,t.getMessage()+"error",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,"Network error. Check your connection",Toast.LENGTH_LONG).show();
             }
         });
     }

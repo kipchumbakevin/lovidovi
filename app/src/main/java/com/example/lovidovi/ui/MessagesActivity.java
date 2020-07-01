@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,9 +21,11 @@ import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lovidovi.R;
@@ -42,10 +46,11 @@ public class MessagesActivity extends AppCompatActivity {
     private ArrayList<MessagesModel>mMessagesArrayList = new ArrayList<>();
     MessagesAdapter messagesAdapter;
     RecyclerView recyclerView;
-    String chat_id,title,phone,simu,r;
+    String chat_id,title,phone,simu,r,secret;
     private static final String KNOW = "com.example.lovidovi.adapters";
     ImageView send;
     EditText typeamessage;
+    TextView secree,sec;
     private final int REQUEST_CODE=99;
     RelativeLayout progressLyt;
     private static final String MESS ="com.example.lovidovi.ui";
@@ -61,18 +66,23 @@ public class MessagesActivity extends AppCompatActivity {
         recyclerView.setAdapter(messagesAdapter);
         progressLyt = findViewById(R.id.progressLoad);
         typeamessage = findViewById(R.id.typeamessage);
+        secree = findViewById(R.id.secree);
+        sec = findViewById(R.id.sec);
         send = findViewById(R.id.sendthemsg);
         chat_id = getIntent().getExtras().getString("CHATID");
         title = getIntent().getExtras().getString("USERNAME");
         phone = getIntent().getExtras().getString("PHONE");
         simu = getIntent().getExtras().getString("SIMU");
         r = getIntent().getExtras().getString("DEL");
+        secret = getIntent().getExtras().getString("SECRET");
         if(getIntent().hasExtra(KNOW)) {
             reset = getIntent().getBooleanExtra(KNOW, false);
         }
         if (r.equals(Integer.toString(1))){
             Toast.makeText(MessagesActivity.this,"Messages in this chat have been deleted.",Toast.LENGTH_SHORT).show();
         }
+        secree.setText(chat_id);
+        sec.setText(secret);
         ActionBar actionBar = getSupportActionBar();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setReverseLayout(true);
@@ -121,11 +131,15 @@ public class MessagesActivity extends AppCompatActivity {
                 hideProgress();
                 if (response.code()==201) {
                     typeamessage.getText().clear();
-                    Intent intent = new Intent(MessagesActivity.this,MainActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(MessagesActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    View view = MessagesActivity.this.getCurrentFocus();
+                    if (view != null){
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                    }
+                    viewSecretAfterSend();
+                    Toast.makeText(MessagesActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MessagesActivity.this, "Server error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MessagesActivity.this, "Server error", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -133,7 +147,7 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(MessagesActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                Toast.makeText(MessagesActivity.this, "Network error. Check your connection.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -164,7 +178,38 @@ public class MessagesActivity extends AppCompatActivity {
             public void onFailure(Call<List<MessagesModel>> call, Throwable t) {
 
                  hideProgress();
-                Toast.makeText(MessagesActivity.this,"Network error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MessagesActivity.this, "Network error. Check your connection.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void viewSecretAfterSend() {
+        mMessagesArrayList.clear();
+        chat_id = secree.getText().toString();
+        showProgress();
+        Call<List<MessagesModel>> call = RetrofitClient.getInstance(MessagesActivity.this)
+                .getApiConnector()
+                .getsecretM(chat_id);
+        call.enqueue(new Callback<List<MessagesModel>>() {
+            @Override
+            public void onResponse(Call<List<MessagesModel>> call, Response<List<MessagesModel>> response) {
+
+                hideProgress();
+                if(response.code()==200){
+                    reeead();
+                    mMessagesArrayList.addAll(response.body());
+                    messagesAdapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(MessagesActivity.this,"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<MessagesModel>> call, Throwable t) {
+
+                hideProgress();
+                Toast.makeText(MessagesActivity.this, "Network error. Check your connection.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -204,11 +249,13 @@ public class MessagesActivity extends AppCompatActivity {
                 hideProgress();
                 if (response.code()==201) {
                     typeamessage.getText().clear();
-                    Intent intent = new Intent(MessagesActivity.this,MainActivity.class);
-                    intent.putExtra(MESS,true);
-                    startActivity(intent);
-                    finish();
-                    Toast.makeText(MessagesActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    View view = MessagesActivity.this.getCurrentFocus();
+                    if (view != null){
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                    }
+                    viewMessagesAfterSend();
+                    Toast.makeText(MessagesActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MessagesActivity.this, "Server error", Toast.LENGTH_LONG).show();
                 }
@@ -218,7 +265,7 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(MessagesActivity.this, t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                Toast.makeText(MessagesActivity.this, "Network error. Check your connection.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -249,7 +296,39 @@ public class MessagesActivity extends AppCompatActivity {
             public void onFailure(Call<List<MessagesModel>> call, Throwable t) {
 
                  hideProgress();
-                Toast.makeText(MessagesActivity.this,"Network error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MessagesActivity.this, "Network error. Check your connection.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    private void viewMessagesAfterSend() {
+        mMessagesArrayList.clear();
+        chat_id = secree.getText().toString();
+        showProgress();
+        Call<List<MessagesModel>> call = RetrofitClient.getInstance(MessagesActivity.this)
+                .getApiConnector()
+                .getM(chat_id);
+        call.enqueue(new Callback<List<MessagesModel>>() {
+            @Override
+            public void onResponse(Call<List<MessagesModel>> call, Response<List<MessagesModel>> response) {
+
+                hideProgress();
+                if(response.code()==200){
+                    read();
+                    mMessagesArrayList.addAll(response.body());
+                    messagesAdapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(MessagesActivity.this,"Internal server error. Please retry",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<MessagesModel>> call, Throwable t) {
+
+                hideProgress();
+                Toast.makeText(MessagesActivity.this, "Network error. Check your connection.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -285,5 +364,4 @@ public class MessagesActivity extends AppCompatActivity {
     private void showProgress() {
         progressLyt.setVisibility(View.VISIBLE);
     }
-
 }

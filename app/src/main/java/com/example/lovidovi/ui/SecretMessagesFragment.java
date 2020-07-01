@@ -167,7 +167,7 @@ public class SecretMessagesFragment extends Fragment {
                                 alertDialog.dismiss();
                                 Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                             } else {
-                               // Toast.makeText(getActivity(), "Server error", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "Server error", Toast.LENGTH_LONG).show();
                             }
 
                         }
@@ -175,7 +175,7 @@ public class SecretMessagesFragment extends Fragment {
                         @Override
                         public void onFailure(Call<SignUpMessagesModel> call, Throwable t) {
                             hideProgress();
-                           // Toast.makeText(getActivity(), t.getMessage() + "error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Network error", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -226,15 +226,14 @@ public class SecretMessagesFragment extends Fragment {
                         no_messages.setVisibility(View.VISIBLE);
                     }
                 } else {
-                  //  Toast.makeText(getActivity(), "Server error " + response.message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Server error " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<ChatsModel>> call, Throwable t) {
                 hideProgress();
-                Log.d("lll", "failed " + t.getMessage());
-              //  Toast.makeText(getActivity(), "Network error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Network error", Toast.LENGTH_SHORT).show();
             }
 
         });

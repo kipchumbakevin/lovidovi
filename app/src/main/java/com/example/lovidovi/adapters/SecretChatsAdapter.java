@@ -33,6 +33,8 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
     private final Context mContext;
     private final ArrayList<ChatsModel> mSecretArrayList;
     private final LayoutInflater mLayoutInflator;
+    private static final String SECRET = "com.example.lovidovi.adapters";
+    String secret = Integer.toString(2);
 
     public SecretChatsAdapter(Context context, ArrayList<ChatsModel>secretmessages){
         mContext = context;
@@ -103,6 +105,7 @@ public class SecretChatsAdapter extends RecyclerView.Adapter<SecretChatsAdapter.
                     intent.putExtra("SIMU",pp);
                     intent.putExtra("USERNAME",username.getText().toString());
                     intent.putExtra("DEL",r);
+                    intent.putExtra("SECRET",secret);
                     mContext.startActivity(intent);
                     //   ((Activity) mContext).finish();
                 }
