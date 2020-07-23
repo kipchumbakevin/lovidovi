@@ -9,7 +9,7 @@
     <string name="CLIENTS_USERNAME">com.example.lovidovi.utils.sharedpref.username</string>
     <string name="CLIENTS_PHONE">com.example.lovidovi.utils.sharedpref.phone</string>
     <string name="CLIENTS_STATUS">com.example.lovidovi.utils.sharedpref.status</string>
-    <!--<string name="CLIENTS_ID">com.example.lovidovi.utils.sharedpref.person</string>-->
+    <!--<string name="CLIENTS_ID">kipchulovidoviovidovi.lovidovi.utils.sharedpref.person</string>-->
     <string name="title_activity_main2">Main2Activity</string>
 
     <!-- TODO: Remove or change this placeholder text -->

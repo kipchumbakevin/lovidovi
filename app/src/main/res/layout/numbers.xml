@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/phone_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ccpDialog_allowSearch="true"
+                app:ccpDialog_fastScroller_bubbleColor="@color/colorPrimaryDark"
+                app:ccpDialog_fastScroller_handleColor="@color/colorPrimaryDark"
+                app:ccpDialog_initialScrollToSelection="true"
+                app:ccpDialog_keyboardAutoPopup="false"
+                app:ccpDialog_showCloseIcon="true"
+                app:ccpDialog_showFastScroller="false"
+                app:ccpDialog_showPhoneCode="true"
+                app:ccpDialog_showTitle="false"
+                app:ccp_arrowColor="@color/colorPrimaryDark"
+                app:ccp_autoDetectCountry="false"
+                app:ccp_autoDetectLanguage="false"
+                app:ccp_autoFormatNumber="false"
+                app:ccp_clickable="true"
+                app:ccp_countryPreference="KE,TZ,UG"
+                app:ccp_defaultNameCode="KE"
+                app:ccp_hintExampleNumber="true"
+                app:ccp_rememberLastSelection="true"
+                app:ccp_selectionMemoryTag="signupCCP"
+                app:ccp_showArrow="true"
+                app:ccp_showFlag="true"
+                app:ccp_showFullName="false"
+                app:ccp_showNameCode="false"
+                app:ccp_showPhoneCode="true"
+                app:ccp_textGravity="RIGHT"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/phone_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/phone_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="phone"
+                android:inputType="phone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ccp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </EditText>
+
+</LinearLayout>

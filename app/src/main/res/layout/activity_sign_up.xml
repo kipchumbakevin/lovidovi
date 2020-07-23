@@ -130,7 +130,25 @@
                 android:textColor="@color/colorBlack"
                 android:layout_margin="5dp"
                 android:text="Register" />
+           <CheckBox
+               android:id="@+id/checkbox"
+               android:layout_width="wrap_content"
+               android:textSize="12sp"
+               android:layout_below="@id/button_sign"
+               android:checked="true"
+               android:layout_height="wrap_content"
+               android:text="By continuing, you agree to our Privacy Policy."/>
+            <TextView
+                android:id="@+id/policy"
+                android:layout_below="@id/checkbox"
+                android:textSize="12sp"
+                android:layout_marginStart="35dp"
+                android:textColor="@color/colorTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Click here to read our Privacy policy"/>
         </RelativeLayout>
     </ScrollView>
+    <include layout="@layout/numbers"/>
     <include layout="@layout/content_progress_bar"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.lovidovi">
+    package="com.kipchulovidovi.lovidovi">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -15,40 +15,40 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.SplashScreen"
+        <activity android:name="com.kipchulovidovi.lovidovi.ui.SplashScreen"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity
-            android:name=".settings.SecurityOptions"
+            android:name="com.kipchulovidovi.lovidovi.settings.SecurityOptions"
             android:label="Options"
-            android:parentActivityName=".settings.SettingsActivity" />
+            android:parentActivityName="com.kipchulovidovi.lovidovi.settings.SettingsActivity" />
         <activity
-            android:name=".settings.ConfirmPhoneChangeCode"
+            android:name="com.kipchulovidovi.lovidovi.settings.ConfirmPhoneChangeCode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".settings.ChangePhoneNumber"
+            android:name="com.kipchulovidovi.lovidovi.settings.ChangePhoneNumber"
             android:label="Change number"
-            android:parentActivityName=".settings.SecurityOptions" />
-        <activity android:name=".settings.SettingsActivity" />
+            android:parentActivityName="com.kipchulovidovi.lovidovi.settings.SecurityOptions" />
+        <activity android:name="com.kipchulovidovi.lovidovi.settings.SettingsActivity" />
         <activity
-            android:name=".settings.ChangePersonalInfo"
+            android:name="com.kipchulovidovi.lovidovi.settings.ChangePersonalInfo"
             android:label="Personal Info"
-            android:parentActivityName=".ui.MainActivity" />
+            android:parentActivityName="com.kipchulovidovi.lovidovi.ui.MainActivity" />
         <activity
-            android:name=".settings.ForgotPasswordActivity"
+            android:name="com.kipchulovidovi.lovidovi.settings.ForgotPasswordActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".settings.ChangePasswordActivity"
+            android:name="com.kipchulovidovi.lovidovi.settings.ChangePasswordActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.MessagesActivity"
-            android:parentActivityName=".ui.MainActivity" />
+            android:name="com.kipchulovidovi.lovidovi.ui.MessagesActivity"
+            android:parentActivityName="com.kipchulovidovi.lovidovi.ui.MainActivity" />
         <activity
-            android:name=".auth.CodeVerificationActivity"
+            android:name="com.kipchulovidovi.lovidovi.auth.CodeVerificationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".auth.LoginActivity"
+            android:name="com.kipchulovidovi.lovidovi.auth.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,16 +57,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".auth.SignUpActivity"
+            android:name="com.kipchulovidovi.lovidovi.auth.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.kipchulovidovi.lovidovi.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9583216739352929~2043944643"/>
+            android:value="ca-app-pub-4220777685017021~8672061972"/>
     </application>
 
 </manifest>

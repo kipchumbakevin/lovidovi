@@ -5,6 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.HomeFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+            ads:adUnitId="ca-app-pub-4220777685017021/8139733022">
         </com.google.android.gms.ads.AdView>
         <TextView
             android:layout_width="match_parent"
@@ -31,21 +34,34 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorTab"/>
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My Quotes"
-            android:paddingStart="10dp"
             android:background="@color/colorGrayy"
-            android:paddingEnd="2dp"
-            android:textColor="@color/colorTab"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Quotes"
+                android:paddingStart="10dp"
+                android:background="@color/colorGrayy"
+                android:paddingEnd="2dp"
+                android:textColor="@color/colorTab"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(swipe left)"
+                android:textSize="7sp"
+                android:background="@color/colorGrayy"
+                android:paddingEnd="2dp"
+                android:textColor="@color/colorTab"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myquotes"
             android:layout_width="match_parent"
@@ -66,11 +82,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/quaotesrecyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="73dp"/>
+            android:layout_height="wrap_content"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
-        </ScrollView>
     </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
     <include layout="@layout/floatingaction"/>
     <include layout="@layout/content_progress_bar"/>
 
