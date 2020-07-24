@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.kipchulovidovi.lovidovi.R;
 import com.kipchulovidovi.lovidovi.adapters.ChatsAdapter;
 import com.kipchulovidovi.lovidovi.models.ChatsModel;
@@ -57,6 +58,7 @@ public class MessagesFragment extends Fragment {
     SharedPreferencesConfig sharedPreferencesConfig;
     private final int REQUEST_CODE=99;
     RelativeLayout progressLyt;
+    CountryCodePicker ccp;
     EditText pp;
     ConstraintLayout no_messages;
     private InterstitialAd mInterstitialAd;
@@ -99,11 +101,13 @@ public class MessagesFragment extends Fragment {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         View view = getLayoutInflater().inflate(R.layout.addmessage, null);
         final EditText message = view.findViewById(R.id.messageM);
+        ccp = view.findViewById(R.id.ccp);
         ImageView contacts = view.findViewById(R.id.gotocontacts);
          pp = view.findViewById(R.id.phoneP);
          progressLyt = view.findViewById(R.id.progressLoad);
         cancel = view.findViewById(R.id.cancel);
         send = view.findViewById(R.id.done);
+        ccp.registerCarrierNumberEditText(pp);
 
         alertDialogBuilder.setView(view);
         final AlertDialog alertDialog = alertDialogBuilder.create();
@@ -148,8 +152,11 @@ public class MessagesFragment extends Fragment {
                 if (pp.getText().toString().isEmpty()) {
                     pp.setError("Required");
                 }
+                if (!ccp.isValidFullNumber()){
+                    Toast.makeText(getActivity(),"Enter a valid number",Toast.LENGTH_SHORT).show();
+                }
                 else {
-                    String phone = pp.getText().toString();
+                    String phone = ccp.getFullNumberWithPlus();
                     String mess = message.getText().toString();
                     showProgress();
                     Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
@@ -205,6 +212,7 @@ public class MessagesFragment extends Fragment {
     }
 
             private void viewMessages() {
+        no_messages.setVisibility(View.GONE);
         showProgress();
         mMessagesArrayList.clear();
                 Call<List<ChatsModel>> call = RetrofitClient.getInstance(getActivity())

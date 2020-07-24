@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.kipchulovidovi.lovidovi.R;
 import com.kipchulovidovi.lovidovi.adapters.SecretChatsAdapter;
 import com.kipchulovidovi.lovidovi.models.ChatsModel;
@@ -58,6 +59,7 @@ public class SecretMessagesFragment extends Fragment {
     EditText pp;
     RelativeLayout progressLyt;
     ConstraintLayout no_messages;
+    CountryCodePicker ccp;
     private final int REQUEST_CODE=99;
     private InterstitialAd mInterstitialAd;
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
@@ -101,8 +103,10 @@ public class SecretMessagesFragment extends Fragment {
         pp = view.findViewById(R.id.phoneP);
         progressLyt = view.findViewById(R.id.progressLoad);
         cancel = view.findViewById(R.id.cancel);
+        ccp = view.findViewById(R.id.ccp);
         send = view.findViewById(R.id.done);
 
+        ccp.registerCarrierNumberEditText(pp);
         alertDialogBuilder.setView(view);
         final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -145,6 +149,9 @@ public class SecretMessagesFragment extends Fragment {
                 }
                 if (pp.getText().toString().isEmpty()) {
                     pp.setError("Required");
+                }
+                if (!ccp.isValidFullNumber()){
+                    Toast.makeText(getActivity(),"Enter a valid number",Toast.LENGTH_SHORT).show();
                 }
                 else {
                     String phone = pp.getText().toString();
@@ -204,6 +211,7 @@ public class SecretMessagesFragment extends Fragment {
     }
 
     private void viewmS() {
+        no_messages.setVisibility(View.GONE);
         showProgress();
         mSecretArrayList.clear();
         Call<List<ChatsModel>> call = RetrofitClient.getInstance(getActivity())

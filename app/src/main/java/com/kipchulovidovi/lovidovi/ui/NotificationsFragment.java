@@ -34,6 +34,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.hbb20.CountryCodePicker;
 import com.kipchulovidovi.lovidovi.R;
 import com.kipchulovidovi.lovidovi.adapters.NotificationsAdapter;
 import com.kipchulovidovi.lovidovi.models.ReceiveNotificationsModel;
@@ -63,6 +64,7 @@ public class NotificationsFragment extends Fragment {
     private final int REQUEST_CODE=99;
     EditText enterNum;
     RelativeLayout progressLyt;
+    CountryCodePicker ccp;
     ConstraintLayout no;
     private InterstitialAd mInterstitialAd;
     private AdView mAdView;
@@ -140,6 +142,8 @@ public class NotificationsFragment extends Fragment {
         cancel = view.findViewById(R.id.cancel);
         done = view.findViewById(R.id.done);
         progressLyt = view.findViewById(R.id.progressLoad);
+        ccp = view.findViewById(R.id.ccp);
+        ccp.registerCarrierNumberEditText(enterNum);
 
         alertDialogBuilder.setView(view);
         final AlertDialog alertDialog = alertDialogBuilder.create();
@@ -150,8 +154,11 @@ public class NotificationsFragment extends Fragment {
                 if (enterNum.getText().toString().isEmpty()){
                     enterNum.setError("Required");
                 }
+                if (!ccp.isValidFullNumber()){
+                    Toast.makeText(getActivity(),"Enter a valid number",Toast.LENGTH_SHORT).show();
+                }
                 else {
-                    String phone = enterNum.getText().toString();
+                    String phone = ccp.getFullNumberWithPlus();
                     showProgress();
                     Call<SignUpMessagesModel> call = RetrofitClient.getInstance(getActivity())
                             .getApiConnector()

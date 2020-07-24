@@ -3,20 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".auth.SignUpActivity">
+
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:textSize="12sp"
-        android:textColor="@color/colorTab"
-        android:background="@drawable/signup"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="5dp"
-        android:text="Login"/>
+        android:background="@drawable/signup"
+        android:text="Login"
+        android:textColor="@color/colorTab"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/titleR"
@@ -29,6 +30,7 @@
         android:textColor="@color/colorTab"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -40,115 +42,177 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_marginEnd="5dp"
+            android:padding="10dp">
 
             <EditText
                 android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_create"
                 android:drawablePadding="20dp"
+                android:hint="name"
+                android:inputType="textCapSentences"
                 android:paddingStart="20dp"
                 android:paddingEnd="3dp"
-                android:layout_marginTop="10dp"
-                android:inputType="textCapSentences"
-                android:layout_width="match_parent"
                 android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                android:drawableStart="@drawable/ic_account_circle"
-                android:textColorHint="@color/colorBlack"
-                android:layout_height="40dp"
-                android:hint="name"/>
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
-                android:textColor="@color/colorBlack"
-                android:paddingStart="20dp"
-                android:layout_marginTop="10dp"
-                android:paddingEnd="3dp"
-                android:textSize="14sp"
-                android:inputType="textCapSentences"
-                android:drawablePadding="20dp"
-                android:textColorHint="@color/colorBlack"
-                android:drawableStart="@drawable/ic_account_circle"
                 android:layout_height="40dp"
                 android:layout_below="@id/name"
-                android:hint="username" />
-            <EditText
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_create"
+                android:drawablePadding="20dp"
+                android:hint="username"
+                android:inputType="textCapSentences"
+                android:paddingStart="20dp"
+                android:paddingEnd="3dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:id="@+id/phone_parent"
                 android:layout_below="@id/username"
-                android:id="@+id/phone"
-                android:drawablePadding="20dp"
-                android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_local_phone"
-                android:textColor="@color/colorBlack"
-                android:textColorHint="@color/colorBlack"
-                android:inputType="phone"
-                android:layout_height="40dp"
-                android:paddingStart="20dp"
-                android:layout_marginTop="10dp"
-                android:paddingEnd="3dp"
-                android:textSize="14sp"
-                android:hint="phone"/>
+                android:layout_weight="5">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:ccpDialog_allowSearch="true"
+                    app:ccpDialog_fastScroller_bubbleColor="@color/colorPrimaryDark"
+                    app:ccpDialog_fastScroller_handleColor="@color/colorPrimaryDark"
+                    app:ccpDialog_initialScrollToSelection="true"
+                    app:ccpDialog_keyboardAutoPopup="false"
+                    app:ccpDialog_showCloseIcon="true"
+                    app:ccpDialog_showFastScroller="false"
+                    app:ccpDialog_showPhoneCode="true"
+                    app:ccpDialog_showTitle="false"
+                    app:ccp_arrowColor="@color/colorPrimaryDark"
+                    app:ccp_autoDetectCountry="false"
+                    app:ccp_autoDetectLanguage="false"
+                    app:ccp_autoFormatNumber="false"
+                    app:ccp_clickable="true"
+                    app:ccp_countryPreference="KE,TZ,UG"
+                    app:ccp_defaultNameCode="KE"
+                    app:ccp_hintExampleNumber="true"
+                    app:ccp_rememberLastSelection="true"
+                    app:ccp_selectionMemoryTag="signupCCP"
+                    app:ccp_showArrow="true"
+                    app:ccp_showFlag="true"
+                    app:ccp_showFullName="false"
+                    app:ccp_showNameCode="false"
+                    app:ccp_showPhoneCode="true"
+                    app:ccp_textGravity="RIGHT"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/phone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="0dp"
+                    android:drawableStart="@drawable/ic_local_phone"
+                    android:layout_height="wrap_content"
+                    android:hint="phone"
+                    android:textColor="@color/colorBlack"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="3dp"
+                    android:inputType="phone"
+                    android:drawablePadding="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ccp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--            <EditText-->
+<!--                android:id="@+id/phone"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_below="@id/username"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:drawableStart="@drawable/ic_phone"-->
+<!--                android:drawablePadding="20dp"-->
+<!--                android:hint="phone"-->
+<!--                android:inputType="phone"-->
+<!--                android:paddingStart="20dp"-->
+<!--                android:paddingEnd="3dp"-->
+<!--                android:textColor="@color/colorBlack"-->
+<!--                android:textColorHint="@color/colorBlack"-->
+<!--                android:textSize="14sp" />-->
+
             <EditText
-                android:layout_below="@id/phone"
                 android:id="@+id/pass"
-                android:drawablePadding="20dp"
-                android:paddingStart="20dp"
-                android:layout_marginTop="10dp"
-                android:paddingEnd="3dp"
-                android:textSize="14sp"
-                android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_lock_outline"
-                android:textColor="@color/colorBlack"
-                android:textColorHint="@color/colorBlack"
                 android:layout_height="40dp"
-                android:hint="password"/>
+                android:layout_below="@id/phone_parent"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_lock_outline"
+                android:drawablePadding="20dp"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:paddingStart="20dp"
+                android:paddingEnd="3dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
             <EditText
-                android:layout_below="@id/pass"
                 android:id="@+id/confirmpass"
-                android:drawablePadding="20dp"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_lock_outline"
-                android:textColor="@color/colorBlack"
-                android:paddingStart="20dp"
-                android:layout_marginTop="10dp"
-                android:inputType="textPassword"
-                android:paddingEnd="3dp"
-                android:textSize="14sp"
-                android:textColorHint="@color/colorBlack"
                 android:layout_height="40dp"
-                android:hint="confirm password"/>
+                android:layout_below="@id/pass"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_lock_outline"
+                android:drawablePadding="20dp"
+                android:hint="confirm password"
+                android:inputType="textPassword"
+                android:paddingStart="20dp"
+                android:paddingEnd="3dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
             <Button
-                android:layout_below="@id/confirmpass"
+                android:id="@+id/button_sign"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                android:textSize="12sp"
+                android:layout_below="@id/confirmpass"
                 android:layout_centerInParent="true"
-                android:id="@+id/button_sign"
-                android:background="@drawable/signup"
-                android:textColor="@color/colorBlack"
                 android:layout_margin="5dp"
-                android:text="Register" />
-           <CheckBox
-               android:id="@+id/checkbox"
-               android:layout_width="wrap_content"
-               android:textSize="12sp"
-               android:layout_below="@id/button_sign"
-               android:checked="true"
-               android:layout_height="wrap_content"
-               android:text="By continuing, you agree to our Privacy Policy."/>
-            <TextView
-                android:id="@+id/policy"
-                android:layout_below="@id/checkbox"
-                android:textSize="12sp"
-                android:layout_marginStart="35dp"
-                android:textColor="@color/colorTab"
+                android:background="@drawable/signup"
+                android:text="Register"
+                android:textColor="@color/colorBlack"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Click here to read our Privacy policy"/>
+                android:layout_below="@id/button_sign"
+                android:checked="true"
+                android:text="By continuing, you agree to our Privacy Policy."
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/checkbox"
+                android:layout_marginStart="35dp"
+                android:text="Click here to read our Privacy policy"
+                android:textColor="@color/colorTab"
+                android:textSize="12sp" />
         </RelativeLayout>
     </ScrollView>
-    <include layout="@layout/numbers"/>
-    <include layout="@layout/content_progress_bar"/>
+        <include layout="@layout/content_progress_bar"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

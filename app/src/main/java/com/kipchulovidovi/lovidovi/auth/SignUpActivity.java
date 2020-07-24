@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hbb20.CCPCountry;
+import com.hbb20.CountryCodePicker;
 import com.kipchulovidovi.lovidovi.R;
+import com.kipchulovidovi.lovidovi.auth.LoginActivity;
 import com.kipchulovidovi.lovidovi.models.SignUpMessagesModel;
 import com.kipchulovidovi.lovidovi.networking.RetrofitClient;
 import com.kipchulovidovi.lovidovi.utils.SharedPreferencesConfig;
@@ -25,13 +27,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
-    EditText name,username,phone,password,confirm,phone_input;
+    EditText name,username,phone,password,confirm;
     Button signup,login;
     CheckBox checkbox;
     TextView policy;
+    CountryCodePicker ccp;
     SharedPreferencesConfig sharedPreferencesConfig;
     RelativeLayout progressLyt;
-    CCPCountry ccp = new CCPCountry();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,20 +42,20 @@ public class SignUpActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         username = findViewById(R.id.username);
         policy = findViewById(R.id.policy);
-        phone_input = findViewById(R.id.phone_input);
         checkbox = findViewById(R.id.checkbox);
         progressLyt = findViewById(R.id.progressLoad);
         login = findViewById(R.id.login);
         phone = findViewById(R.id.phone);
         password = findViewById(R.id.pass);
         confirm = findViewById(R.id.confirmpass);
+        ccp = findViewById(R.id.ccp);
 
-
-
+        //register ccp with your phone input edittext
+        ccp.registerCarrierNumberEditText(phone);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -85,6 +87,9 @@ public class SignUpActivity extends AppCompatActivity {
                 if (isErrors()){
                     Toast.makeText(SignUpActivity.this,"Ensure you fill all fields",Toast.LENGTH_SHORT).show();
                 }
+                if (!ccp.isValidFullNumber()){
+                    Toast.makeText(SignUpActivity.this,"Enter a valid number",Toast.LENGTH_SHORT).show();
+                }
                 else {
                     signupUser();
                 }
@@ -101,7 +106,11 @@ public class SignUpActivity extends AppCompatActivity {
             return true;
         }if (password.getText().toString().isEmpty()){
             return true;
-        }if (confirm.getText().toString().isEmpty()){
+        }
+
+        //Hii ni validation ya input
+
+        if (confirm.getText().toString().isEmpty()){
             return true;
         }else{
             return false;
@@ -112,12 +121,17 @@ public class SignUpActivity extends AppCompatActivity {
         final String nameN,userN,phoneN,passN,confirmPassN;
         nameN = name.getText().toString();
         userN = username.getText().toString();
-        phoneN = phone.getText().toString();
+
+        // get full number
+        phoneN = ccp.getFullNumberWithPlus();
+
         passN = password.getText().toString();
         confirmPassN = confirm.getText().toString();
+
         if (!passN.equals(confirmPassN)){
             Toast.makeText(SignUpActivity.this,"Passwords do not match",Toast.LENGTH_LONG).show();
-        }else {
+        }
+        else {
             showProgress();
             Call<SignUpMessagesModel> call = RetrofitClient.getInstance(SignUpActivity.this)
                     .getApiConnector()
